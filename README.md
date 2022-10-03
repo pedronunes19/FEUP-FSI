@@ -1,9 +1,8 @@
-
 Breve descrição do grupo
 
-* Turno: [LM]XX
-* Grupo: YY
+* Turno: L06
+* Grupo: 03
 * Alunos:
-    - Aluno1 upZZZZZ 
-    - Aluno2 upZZZZZ
-    - Aluno3 upZZZZZ
+    - Daniel Silva up201909935 
+    - Manuel Alves up201906910
+    - Pedro Nunes up202004714
