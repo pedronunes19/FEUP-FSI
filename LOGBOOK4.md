@@ -23,4 +23,53 @@ Verificamos que as variáveis de ambiente **PATH** e **ANY_NAME** foram alterada
 # Task 6 
 
 Como root, conseguimos alterar a variável **PATH** de outro utilizador, algo que verificamos na tarefa anterior no programa **SET-UID**.
-Conseguindo alterar o **PATH**, e como o programa executa comandos que utilizam o caminho relativo, se alterarmos o **PATH** para um caminho que contenha um executável `ls`, irá ser executado esse código, em vez do suposto `/bin/ls/`. Isto é uma vulnerabilidade porque, se alguém conseguir alterar a variável `PATH`, acaba por conseguir ter todo o controlo.
+Conseguindo alterar o **PATH**, e como o programa executa comandos que utilizam o caminho relativo, se alterarmos o **PATH** para um caminho que contenha um executável `ls`, irá ser executado esse código, em vez do suposto `/bin/ls/`.
+
+my_ls.c
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+
+int main(){
+    printf("my_ls.c %d\n", geteuid());
+    system("ls");
+    return 0;
+}
+````
+
+ls.c
+```c
+#include <stdio.h>
+#include <unistd.h>
+
+int main(){
+    printf("Malicious code.\n");
+    system("ls: %d", getuid());
+    return 0;
+}
+```
+
+```
+[10/03/22]seed@VM:~$ export PATH=/home/seed:$PATH
+[10/03/22]seed@VM:~$ gcc my_ls.c -o my_ls
+[10/03/22]seed@VM:~$ sudo chown root my_ls
+[10/03/22]seed@VM:~$ sudo chmod 4755 my_ls
+[10/03/22]seed@VM:~$ my_ls
+my_ls.c 0
+Desktop    Downloads  Music  my_ls.c   Public	  Videos
+Documents  ls.c       my_ls  Pictures  Templates
+[10/03/22]seed@VM:~$ gcc ls.c -o ls
+[10/03/22]seed@VM:~$ my_ls
+my_ls.c 0
+Malicious code.
+ls: 1000
+```
+
+
+Neste caso, ao alterar **PATH**, conseguimos executar um programa escrito por nós no lugar do comando `ls`.
+Ao observar o valor devolvido pela função `geteuid()` percebemos que o nosso programa `ls` não tem privilégios root (UID != 0), ao contrário do programa `my_ls.c`. Nesta máquina virtual, `bin/sh` é um link simbólico para `bin/dash`, e este programa pôe em prática uma medida de segurança que não permite que o mesmo seja corrido como um processo Set-UID, mitigando neste caso a vulnerabilidade que encontramos.
+
+
+
+ 
