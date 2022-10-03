@@ -1,24 +1,24 @@
 # Task 1
 
-Nesta tarefa observamos o comportamento das funções `printenv` e `env` - imprimem todas as variáveis de ambiente do sistema - e manipulamo-las, adicionando e eliminando, através dos comandos `export` e unset, respetivamente.
+Nesta tarefa observamos o comportamento das funções `printenv` e `env` - imprimem todas as variáveis de ambiente do sistema - e manipulamo-las, adicionando e eliminando variáveis, através dos comandos `export` e `unset`, respetivamente.
 
 # Task 2
 
-Concluímos que os child processes herdam as variáveis de ambiente dos parent processes. O comando `diff` não teve qualquer output, o que significa que as variáveis de ambiente são as mesmas (ficheiros são iguais).
+Concluímos que os child processes herdam as variáveis de ambiente dos parent processes. O comando `diff` não teve qualquer output, o que significa que as variáveis de ambiente são as mesmas (ficheiros resultantes do output são iguais para ambos os processos).
 
 # Task 3
 
-Na primeira compilação, quando o 3º parâmetro (`envp[]`) da função `execve` é **NULL**, não passasmos ao novo programa (que vai correr dentro do processo atual), nenhuma variável de ambiente, pois não houve output do `myenv.c`. Concluímos então que temos de passar as variáveis através do 3º argumento (envp[])
+Na primeira compilação, quando o 3º parâmetro (`envp[]`) da função `execve` é **NULL**, não passamos ao novo programa (que vai correr dentro do processo atual) nenhuma variável de ambiente, não resultando qualquer output do programa `myenv.c`. Concluímos então que temos de passar as variáveis de ambiente através do 3º argumento (`envp[]`), como é especificado na entrada do manual (`man execve`).
 
 Na 2ª compilação podemos confirmar que as variáveis de ambiente foram passadas do programa inicial para o novo programa, ao chamar `execve("usr/bin/env", arg, environ)`.
 
 # Task 4
 
-Nesta tarefa, pudemos confirmar que a função system usa a função `execl`, de forma a executar `"bin/sh"`, e `execl` chama `execve`, passando-lhe a array com variáveis de ambiente. Assim, com a função `system`, as variàveis de ambiente são passadas ao novo programa.
+Nesta tarefa, pudemos confirmar que a função system usa a função `execl`, de forma a executar `"bin/sh"`, e `execl` chama `execve`, passando-lhe a array com variáveis de ambiente. Assim, chamando a função `system`, as variáveis de ambiente são passadas ao novo programa.
 
 # Task 5
 
-Verificamos que as variáveis de ambiente **PATH** e **ANY_NAME** foram alteradas no processo criado. No entanto a **LD_LIBRARY_PATH** não foi alterada. Isto é um mecanismo de defesa que impede outro utilizador de alterar de alterar linked libraries e executar código malicioso.
+Verificamos que as variáveis de ambiente **PATH** e **ANY_NAME** foram alteradas no processo criado. No entanto **LD_LIBRARY_PATH** não foi alterada. Isto é um mecanismo de defesa que impede outro utilizador de alterar de alterar linked libraries e executar código malicioso.
 
 # Task 6 
 
