@@ -2,6 +2,17 @@
 
 Nesta tarefa observamos o comportamento das funções `printenv` e `env` - imprimem todas as variáveis de ambiente do sistema - e manipulamo-las, adicionando e eliminando variáveis, através dos comandos `export` e `unset`, respetivamente.
 
+```bash
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ printenv PWD
+/home/seed/seed-labs/category-software/Environment_Variable_and_SetUID
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ export NEW_VAR="hello world"
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ printenv NEW_VAR
+hello world
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ unset NEW_VAR
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ printenv NEW_VAR
+[10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ 
+```
+
 # Task 2
 
 Concluímos que os child processes herdam as variáveis de ambiente dos parent processes. O comando `diff` não teve qualquer output, o que significa que as variáveis de ambiente são as mesmas (ficheiros resultantes do output são iguais para ambos os processos).
