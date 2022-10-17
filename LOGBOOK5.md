@@ -30,9 +30,7 @@ total 32
 
 # Task 3
 
-Usando o comando `p` do debugger `gdb` foi possível obter o endereço guardado no registo `ebp` e o endereço do `buffer`. Tendo em conta que o valor do `frame pointer` é 0xffffca98, o valor do `return address` será 0xffffca98 + 4. De modo a descobrir a `distância` entre o endereço base do buffer e o return address, calculou-se a distância entre o ebp e o buffer (0xffffca98 - 0xffffca2c): 108. Uma vez que, o return address está acima do ebp 4 bytes, a `distância` é 108 + 4 = 112.
-
-ACRESCENTAR FOTO **AQUI**
+Usando o comando `p` do debugger `gdb` foi possível obter o endereço guardado no registo `ebp` e o endereço do `buffer`. Tendo em conta que o valor do `frame pointer` é 0xffffca98, o valor do `return address` será 0xffffca98 + 4. De modo a descobrir a `distância` entre o endereço base do buffer e o return address, calculou-se a distância entre o ebp e o buffer (0xffffca98 - 0xffffca2c): 108. Uma vez que, o return address está 4 bytes acima do ebp, a `distância` é 108 + 4 = 112.
 
 ```bash
 gdb-peda$ p $ebp
@@ -43,7 +41,11 @@ gdb-peda$ p/d 0xffffca98 - 0xffffca2c
 $3 = 108
 gdb-peda$ quit
 ```
+
 O conteúdo do `shellcode[]` (código malicioso) foi substituído pelo código shellcode 32-bit, cujo tamanho é 27 bytes. Uma vez que o tamanho do array é 517, o `start` deverá ser <= 490 (517 - 27). Neste caso, colocou-se o código malicioso no final do array (start = 490) e o restante é preenchido com 0x90 (NOP´s).
+O valor de `ret` calculado acima é 0xffffca98 + 8, no entanto, tendo em conta a nota 2 do guião - "the frame pointer value obtained from gdb is different from that during the actual execution (without using gdb)(...)so the actual frame pointer value will be larger.". Sendo assim o valor de `ret` deverá ser > 0xffffca98 + 8. O valor usado foi 0xffffca98 + 200, foi obtido por tentativa e erro e a condição do resultado 0xffffca98 + nnn não conter nenhum byte a zero está garantida. 
+
+![](./screenshots/logbook5_task3.png) Figura 1: Estrutura do badfile
 
 exploit.py
 ```python
@@ -79,6 +81,7 @@ with open('badfile', 'wb') as f:
   f.write(content)
 ```
 
+Como se pode confirmar, depois de correr o programa `stack-L1` temos acesso a uma root shell - `euid=0(root)`
 
 ```sh
 [10/16/22]seed@VM:~/.../code$ ./exploit.py 
