@@ -95,7 +95,89 @@ uid=1000(seed) gid=1000(seed) euid=0(root) groups=1000(seed),4(adm),24(cdrom),27
 # CTF - Week 5
 
 # Task 1
+Ao analisar o checksec, pudemos confirmar que a arquitetura do ficheiro é x86 (Arch), não existe um cannary a proteger o return address (Stack), a stack tem permisssão de execução (NX), e as posições do binário não estão randomizadas (PIE), por fim existem regiões de memória com permissões de leitura, escrita e execução (RWX), neste caso referindo-se à stack.
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char meme_file[8] = "mem.txt\0";
+    char buffer[20];
+
+    printf("Try to unlock the flag.\n");
+    printf("Show me what you got:");
+    fflush(stdout);
+    scanf("%28s", &buffer);
+
+    printf("Echo %s\n", buffer);
+
+    printf("I like what you got!\n");
+    
+    FILE *fd = fopen(meme_file,"r");
+    
+    while(1){
+        if(fd != NULL && fgets(buffer, 20, fd) != NULL) {
+            printf("%s", buffer);
+        } else {
+            break;
+        }
+    }
 
 
+    fflush(stdout);
+    
+    return 0;
+}
+```
+
+Pela analise do programa, verificamos que ele não verifica overflows, o ficheiro que é aberto é guardado numa array que está diretamente acima do buffer, sendo este buffer lido pelo input. A flag está guardada num ficheiro flag.txt. Assim só precisamos de dar input de uma string do género "aaaaaaaaaaaaaaaaaaaaflag.txt" (primeiros 20 caracteres são guardados no buffer (tamanho 20), e os seguintes são guardados no nome do ficheiro como não há verificação de overflow, sendo assim aberto o ficheiro flag.txt que nos dá acesso a flag).
+
+![](./screenshots/CTF5.png) 
 
 # Task 2
+
+Checksec dá nos a mesma informação que na tarefa anterior. No entanto o programa tem outro mecanismo de defesa, isto é, existe outro buffer entre o buffer a que damos overflow, e o que pretendemos mudar. Este outro buffer é verificado, sendo só aberto o ficheiro depois deste ser verificado.
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    char meme_file[8] = "mem.txt\0";
+    char val[4] = "\xef\xbe\xad\xde";
+    char buffer[20];
+
+    printf("Try to unlock the flag.\n");
+    printf("Show me what you got:");
+    fflush(stdout);
+    scanf("%32s", &buffer);
+    if(*(int*)val == 0xfefc2223) {
+        printf("I like what you got!\n");
+        
+        FILE *fd = fopen(meme_file,"r");
+        
+        while(1){
+            if(fd != NULL && fgets(buffer, 20, fd) != NULL) {
+                printf("%s", buffer);
+            } else {
+                break;
+            }
+        }
+    } else {
+        printf("You gave me this %s and the value was %p. Disqualified!\n", meme_file, *(long*)val);
+    }
+
+    fflush(stdout);
+    
+    return 0;
+}
+```
+
+Se não mudarmos o input, o valor que é comparado ao 0xfefc2223 é 0xdeadbeef (valor inicial do val). Assim, no exploit-example.py temos de mudar o input, com base no mesmo raciocínio da tarefa anterior, só que desta vez temos de escrever algo entre os 20 caracteres guardados no buffer e flag.txt, que irão substituir o que está em val. Assim, uma solução como a da figura abaixo será possivel.
+
+![](./screenshots/CTF5a.png) 
+
+Ao escrever "aaaaaaaaaaaaaaaaaaaa\x23\x22\xfc\xfeflag.txt", estamos a guardar no buffer os primeiros 20 caracteres, 0xfefc2223 em val (tornando então a condição no if verdadeira), e flag.txt no meme_file. Assim, abrimos o flag.txt e obtemos acesso a flag.
+
+![](./screenshots/CTF5b.png) 
