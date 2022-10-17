@@ -73,7 +73,7 @@ gdb-peda$ quit
 ```
 
 O conteúdo do `shellcode[]` (código malicioso) foi substituído pelo código shellcode 32-bit, cujo tamanho é 27 bytes. Uma vez que o tamanho do array é 517, o `start` deverá ser <= 490 (517 - 27). Neste caso, colocou-se o código malicioso no final do array (start = 490) e o restante é preenchido com 0x90 (NOP´s).
-O valor de `ret` calculado abaixo (figura 1) é 0xffffca98 + 8, no entanto, tendo em conta a nota 2 do guião - "the frame pointer value obtained from gdb is different from that during the actual execution (without using gdb)(...)so the actual frame pointer value will be larger.". Sendo assim o valor de `ret` deverá ser > 0xffffca98 + 8. O valor usado foi 0xffffca98 + 200, foi obtido por tentativa e erro e a condição do resultado 0xffffca98 + nnn não conter nenhum byte a zero está garantida, deste modo a função strcpy() não termina antes do esperado. 
+O valor de `ret` calculado abaixo (figura 1) é 0xffffca98 + 8, no entanto, tendo em conta a nota 2 do guião - "the frame pointer value obtained from gdb is different from that during the actual execution (without using gdb)(...)so the actual frame pointer value will be larger.". Sendo assim o valor de `ret` deverá ser > 0xffffca98 + 8. O valor usado foi 0xffffca98 + 200. Este foi obtido por tentativa e erro e a condição do resultado 0xffffca98 + nnn não conter nenhum byte a zero está garantida, deste modo a função strcpy() não termina antes do esperado. 
 
 ![](./screenshots/logbook5_task3.png) Figura 1: Estrutura do badfile
 
