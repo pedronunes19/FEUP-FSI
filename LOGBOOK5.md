@@ -1,4 +1,6 @@
-# Task 1
+# SEED Labs - Buffer Overflow Setuid Lab
+
+## Task 1
 
 ```bash
 [10/10/22]seed@VM:~/.../shellcode$ a32.out
@@ -13,7 +15,7 @@ $ id -u
 0
 ```
 
-# Task 2
+## Task 2
 
 ```bash
 [10/10/22]seed@VM:~/.../code$ gcc -DBUF_SIZE=100 -m32 -o stack -z execstack -fno-stack-protector stack.c
@@ -28,7 +30,7 @@ total 32
 -rw-r--r-- 1 seed seed  1132 Oct  3 05:58 stack.c
 ```
 
-# Task 3
+## Task 3
 
 Usando o comando `p` do debugger `gdb` foi possível obter o endereço guardado no registo `ebp` e o endereço do `buffer`. Tendo em conta que o valor do `frame pointer` é 0xffffca98, o valor do `return address` será 0xffffca98 + 4. De modo a descobrir a `distância` entre o endereço base do buffer e o return address, calculou-se a distância entre o ebp e o buffer (0xffffca98 - 0xffffca2c): 108. Uma vez que, o return address está 4 bytes acima do ebp, a `distância` é 108 + 4 = 112.
 
@@ -90,3 +92,10 @@ Input size: 517
 # id                                                                                                             
 uid=1000(seed) gid=1000(seed) euid=0(root) groups=1000(seed),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),120(lpadmin),131(lxd),132(sambashare),136(docker
 ```
+# CTF - Week 5
+
+# Task 1
+
+
+
+# Task 2
