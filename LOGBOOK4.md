@@ -1,4 +1,6 @@
-# Task 1
+# SEED Labs – Environment Variable and Set-UID Program Lab
+
+## Task 1
 
 Nesta tarefa observamos o comportamento das funções `printenv` e `env` - imprimem todas as variáveis de ambiente do sistema - e manipulamo-las, adicionando e eliminando variáveis, através dos comandos `export` e `unset`, respetivamente.
 
@@ -13,7 +15,7 @@ hello world
 [10/07/22]seed@VM:~/.../Environment_Variable_and_SetUID$ 
 ```
 
-# Task 2
+## Task 2
 
 O código em `myprintenv.c` imprime a lista das variáveis de ambiente do child process e o output foi guardado no ficheiro `file`. Depois das alterações sugeridas, a lista das variáveis de ambiente do parent process foi guardada no ficheiro `file2`.
 
@@ -24,17 +26,17 @@ Concluímos que os child processes herdam as variáveis de ambiente dos parent p
 [10/08/22]seed@VM:~/.../Labsetup$ 
 ```
 
-# Task 3
+## Task 3
 
 Na primeira compilação, quando o 3º parâmetro (`envp[]`) da função `execve` é **NULL**, não passamos ao novo programa (que vai correr dentro do processo atual) nenhuma variável de ambiente, não resultando qualquer output do programa `myenv.c`. Concluímos então que o novo programa não herda automaticamente as variáveis de ambiente e estas devem ser passadas através do 3º argumento (`envp[]`), como é especificado na entrada do manual (`man execve`).
 
 Na 2ª compilação podemos confirmar que as variáveis de ambiente foram passadas do programa inicial para o novo programa, ao chamar `execve("usr/bin/env", arg, environ)`.
 
-# Task 4
+## Task 4
 
 Nesta tarefa, pudemos confirmar que a função system usa a função `execl`, de forma a executar `"bin/sh"`, e `execl` chama `execve`, passando-lhe o array com as variáveis de ambiente. Assim, chamando a função `system`, as variáveis de ambiente são passadas ao novo programa.
 
-# Task 5
+## Task 5
 
 ```bash
 [10/08/22]seed@VM:~/.../Labsetup$ a.out > file
@@ -54,7 +56,7 @@ teste
 ```
 Verificámos que as variáveis de ambiente **PATH** e **ANY_NAME** foram passadas ao Set-UID child process ao contrário da **LD_LIBRARY_PATH**. Podemos concluir que algumas variáveis de ambiente são ignoradas pelo dynamic linker ao correr um programa Set-UID com o proprietário root. **LD_LIBRARY_PATH** indica ao dynamic linker onde procurar shared libraries que o programa faz referência.
 
-# Task 6 
+## Task 6 
 
 Alterando a variável de ambiente **PATH** como sugerido e como o programa Set-UID executa comandos que utilizam o caminho relativo, o nosso programa `ls` em `/home/seed` irá ser executado em vez do suposto `/bin/ls/`.
 
@@ -110,6 +112,27 @@ my_ls 0
 Malicious code.
 ls: 0
 ```
+
+## CTF - Week 4
+
+# Task 1
+
+Na primeira tarefa, fizemos o reconhecimento, recolhendo os seguintes dados que poderiam ser importantes para encontrar e explorar vunerabilidades:
+- Versão do WordPress 5.8.1
+- Plugins instalados: 
+    - WooCommerce plugin 5.7.1
+    - Booster for WooCommerce plugin 5.4.3
+- Possíveis users:
+    - admin
+    - Orval Sanford
+
+Com um pouco de pesquisa, descobrimos que havia uma vulnerabilidade na vesão 5.4.3 do Booster for WooCommerce plugin, em que seria possível ganhar acesso admin no site. O respetivo CVE é o CVE-2021-34646.
+
+# Task 2
+
+Tendo já descoberto o CVE, fomos procurar por exploits, tendo encontrado um exploit " WordPress Plugin WooCommerce Booster Plugin 5.4.3 - Authentication Bypass ". Fizemos download do exploit e, seguindo as instruções que havia no código comentado, encontramos o seguinte:~
+
+
 
 
 
