@@ -76,11 +76,12 @@ Vamos escrever no standard input a string "%s". A função `myprintf` vai chamar
 ```c
  printf("%s");
  ```
-Fazer esta chamada, sem passar os argumentos necessários à função `printf`, faz com que o programa trate um endereço na stack como um endereço onde uma string deveria estar guardada. O mais provável é que não seja possível ler uma string.
+Fazer esta chamada, sem passar os argumentos necessários à função `printf`, faz com que o programa trate um endereço na stack como um endereço onde uma string deveria estar guardada. O mais provável é que não seja possível ler uma string, levando o programa a terminar indevidamente.
 ```
 [11/07/22]seed@VM:~/.../Labsetup$ echo %s | nc 10.9.0.5 9090
 ```
 
+- Output do container:
 ```
 server-10.9.0.5 | Got a connection from 10.9.0.1
 server-10.9.0.5 | Starting format
@@ -92,5 +93,7 @@ server-10.9.0.5 | Received 3 bytes.
 server-10.9.0.5 | Frame Pointer (inside myprintf):      0xffffd018
 server-10.9.0.5 | The target variable's value (before): 0x11223344
 ```
+
+Não é imprimida nenhuma mensagem de retorno, pelo que presupomos que o programa terminou sem retornar devidamente.
 
 # CTF
