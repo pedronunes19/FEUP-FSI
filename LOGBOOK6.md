@@ -85,7 +85,7 @@ server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 
 ### Task 2.B: Heap Data
 
-Em relação à alínea anterior, os primeiros 4 bytes do input (variável `number`) foram substituídos pelo endereço da _secret message_, `0x080b4008`, que foi obtido através do printout do server - `"The secret message's address:  0x080b4008`. O último format specifier %x foi substituído por `%s`, assim a função `printf` trata o valor desse endereço como uma `string`
+Em relação à alínea anterior, os primeiros 4 bytes do input (variável `number`) foram substituídos pelo endereço da _secret message_, `0x080b4008`, que foi obtido através do printout do server - `"The secret message's address:  0x080b4008`. O último format specifier `%x` foi substituído por `%s`, assim a função `printf` trata o valor desse endereço como uma `string`
 
 - build_string.py
 ```python
@@ -132,6 +132,8 @@ server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 ## Task 3: Modifying the Server Program’s Memory
 
 ### Task 3.A: Change the value to a different value
+
+O endereço da variável `target` é `0x080e5068` e este corresponde aos primeiros 4 bytes do input, à semelhança do que foi feito na Task 2. Por último, foi utilizado o format specifier `%n`, deste modo o número de caracteres impressos pela função `printf` será guardado no endereço indicado, o que permite alterar o valor da variável para outro qualquer. Através do printout do container é possível confirmar que o valor original da variável `target` (0x11223344) foi alerado para `0xed`, que corresponde a 237 em decimal. Isto quer dizer que 237 caracteres foram impressos antes da função `printf` tratar o último format specifier.
 
 - build_string.py
 ```python
@@ -212,7 +214,8 @@ server-10.9.0.5 | Waiting for user input ......
 server-10.9.0.5 | Received 1500 bytes.
 server-10.9.0.5 | Frame Pointer (inside myprintf):      0xffffd138
 server-10.9.0.5 | The target variable's value (before): 0x11223344
-server-10.9.0.5 | (...) The target variable's value (after):  0x00005000
+server-10.9.0.5 | (...) 
+server-10.9.0.5 | The target variable's value (after):  0x00005000
 server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 ```
 
