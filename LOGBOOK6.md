@@ -177,6 +177,8 @@ server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 
 ### Task 3.B: Change the value to 0x5000
 
+De forma a alterar a variável `target` para um valor específico, neste caso `0x5000` (20480 em decimal), com a técnica da task anterior é necessário utilizar `modificadores de precisão` para controlar o número de dígitos impressos e consequentemente o valor final da variável. Foram aplicados os modificadores de precisão `".330"` e `".16"` aos format specifiers `%x` e assim foram impressos 20480 carateres - 4 (para o endereço 0x080e5068) + 62 * 330 + 16.
+
 - build_string.py
 ```python
 #!/usr/bin/python3
@@ -218,5 +220,7 @@ server-10.9.0.5 | (...)
 server-10.9.0.5 | The target variable's value (after):  0x00005000
 server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 ```
+
+É possível confimar o valor da variável `target` - "The target variable's value (after):  0x00005000".
 
 # CTF
