@@ -85,6 +85,8 @@ server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 
 ### Task 2.B: Heap Data
 
+Em relação à alínea anterior, os primeiros 4 bytes do input (variável `number`) foram substituídos pelo endereço da _secret message_, `0x080b4008`, que foi obtido através do printout do server - `"The secret message's address:  0x080b4008`. O último format specifier %x foi substituído por `%s`, assim a função `printf` trata o valor desse endereço como uma `string`
+
 - build_string.py
 ```python
 #!/usr/bin/python3
