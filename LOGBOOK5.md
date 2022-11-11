@@ -123,8 +123,7 @@ uid=1000(seed) gid=1000(seed) euid=0(root) groups=1000(seed),4(adm),24(cdrom),27
 
 # CTF - Week 5
 
-# Task 1
-Ao analisar o checksec, pudemos confirmar que a arquitetura do ficheiro é x86 (Arch), não existe um cannary a proteger o return address (Stack), a stack tem permisssão de execução (NX), e as posições do binário não estão randomizadas (PIE), por fim existem regiões de memória com permissões de leitura, escrita e execução (RWX), neste caso referindo-se à stack.
+## Desafio 1
 
 ```
 #include <stdio.h>
@@ -160,11 +159,11 @@ int main() {
 }
 ```
 
-Pela analise do programa, verificamos que ele não verifica overflows, o ficheiro que é aberto é guardado numa array que está diretamente acima do buffer, sendo este buffer lido pelo input. A flag está guardada num ficheiro flag.txt. Assim só precisamos de dar input de uma string do género "aaaaaaaaaaaaaaaaaaaaflag.txt" (primeiros 20 caracteres são guardados no buffer (tamanho 20), e os seguintes são guardados no nome do ficheiro como não há verificação de overflow, sendo assim aberto o ficheiro flag.txt que nos dá acesso a flag).
+Pela análise do código source do desafio 1, verificou-se que o programa abre o ficheiro especificado em `meme_file`, que por defeito é `mem.txt`, no entanto, alterando o valor de `meme_file` é possível controlar o ficheiro que é aberto. A função `scanf` lê até 28 bytes do utilizador, guardando esse valor na variável `buffer` de tamanho 20 (possibilidade de buffer-overflow). Os 8 bytes extra podem ser utilizados para alterar o valor de `meme_file`, variável local declarada antes de `buffer`. Assim, o input pode ser uma string do género "aaaaaaaaaaaaaaaaaaaaflag.txt" - os primeiros 20 caracteres (aleatórios) são guardados no `buffer` (tamanho 20), e os últimos 8 (flag.txt) são utilizados para dar overwrite ao conteúdo de `meme_file`. O ficheiro flag.txt é aberto, dando acesso à flag.
 
 ![](./screenshots/CTF5.png) 
 
-# Task 2
+## Desafio 2
 
 Checksec dá nos a mesma informação que na tarefa anterior. No entanto o programa tem outro mecanismo de defesa, isto é, existe outro buffer entre o buffer a que damos overflow, e o que pretendemos mudar. Este outro buffer é verificado, sendo só aberto o ficheiro depois deste ser verificado.
 
