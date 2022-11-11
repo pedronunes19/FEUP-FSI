@@ -165,7 +165,7 @@ Pela análise do código source do desafio 1, verificou-se que o programa abre o
 
 ## Desafio 2
 
-Checksec dá nos a mesma informação que na tarefa anterior. No entanto o programa tem outro mecanismo de defesa, isto é, existe outro buffer entre o buffer a que damos overflow, e o que pretendemos mudar. Este outro buffer é verificado, sendo só aberto o ficheiro depois deste ser verificado.
+Depois de analisar o código source do desafio 2, verificou-se que foi declarada uma nova variável `val` (tamanho 4) entre `meme_file` e `buffer`. Desta vez, o programa irá verificar a igualdade entre o valor da nova variável `val` (por defeito 0xdeadbeef) e 0xfefc2223, sendo que o ficheiro especificado em `meme_file` é aberto apenas se esta igualdade for verdadeira. A função `scanf` lê agora até **32** bytes do utilizador, guardando esse valor na variável `buffer`, cujo tamanho não foi alterado (possibilidade de buffer-overflow).
 
 ```
 #include <stdio.h>
@@ -202,10 +202,11 @@ int main() {
 }
 ```
 
-Se não mudarmos o input, o valor que é comparado ao 0xfefc2223 é 0xdeadbeef (valor inicial do val). Assim, no exploit-example.py temos de mudar o input, com base no mesmo raciocínio da tarefa anterior, só que desta vez temos de escrever algo entre os 20 caracteres guardados no buffer e flag.txt, que irão substituir o que está em val. Assim, uma solução como a da figura abaixo será possivel.
+Estas alterações não mitigam na totalidade o problema, porque o primeiro argumento da função `scanf` foi alterado de 28 para 32, mantendo-se o tamanho do `buffer`, continuando a ser possível dar overwrite ao conteúdo de `meme_file`. Assim, no exploit-example.py é necessário fazer alterações no input tal como é sugerido na figura seguinte.
 
 ![](./screenshots/CTF5a.png) 
 
-Ao escrever "aaaaaaaaaaaaaaaaaaaa\x23\x22\xfc\xfeflag.txt", estamos a guardar no buffer os primeiros 20 caracteres, 0xfefc2223 em val (tornando então a condição no if verdadeira), e flag.txt no meme_file. Assim, abrimos o flag.txt e obtemos acesso a flag.
+Ao escrever "aaaaaaaaaaaaaaaaaaaa\x23\x22\xfc\xfeflag.txt" - os primeiros 20 caracteres (aleatórios) são guardados no `buffer` (tamanho 20), os 4 bytes seguintes (0xfefc2223) serão guardados na variável `val` (tornando a condição no if verdadeira) e os últimos 8 (flag.txt) são utilizados para dar overwrite ao conteúdo de `meme_file`. O ficheiro flag.txt é aberto, dando acesso à flag. 
+Ao correr o comando `checksec` reparou-se que a arquitetura é little-endian, por isso é necessário cuidado ao escrever os 4 bytes (\x23\x22\xfc\xfe) do input, isto é, devem ser escritos do LSB para o MSB.  
 
 ![](./screenshots/CTF5b.png) 
