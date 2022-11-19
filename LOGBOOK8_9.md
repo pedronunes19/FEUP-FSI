@@ -62,3 +62,44 @@ mysql> SELECT * FROM credential WHERE Name='Alice';
 1 row in set (0.00 sec)
 
 ```
+
+## Task 2: SQL Injection Attack on SELECT Statement
+
+O seguinte código dentro do unsafe_home.php, contém uma vulnerabilidade.
+
+```
+$input_uname = $_GET[’username’];
+$input_pwd = $_GET[’Password’];
+$hashed_pwd = sha1($input_pwd);
+...
+$sql = "SELECT id, name, eid, salary, birth, ssn, address, email,nickname, Password
+        FROM credential
+        WHERE name= ’$input_uname’ and Password=’$hashed_pwd’";
+$result = $conn -> query($sql);
+// The following is Pseudo Code
+if(id != NULL) {
+    if(name==’admin’) {
+        return All employees information;
+    } 
+    else if (name !=NULL){
+        return employee information;
+    }
+} 
+else {
+    Authentication Fails;
+}
+```
+
+### Task 2.1: SQL Injection Attack from webpage
+
+Se inserirmos no username uma string com o formato  "string'#", fechamos a string e o resto do código seguinte é comentado até ", sendo que o código fica sem erros.
+Com a informação anterior, conseguimos fazer login como sendo admin, sem precisar da password:
+
+![](./screenshots/admin'#.png)
+
+Depois de fazer login, obtemos a seguinte informação:
+
+![](./screenshots/userdetails.png)
+
+### Task 2.2: SQL Injection Attack from command line
+
