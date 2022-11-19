@@ -95,7 +95,7 @@ else {
 Se inserirmos no username uma string com o formato  "string'#", fechamos a string e o resto do código seguinte é comentado até ", sendo que o código fica sem erros.
 Com a informação anterior, conseguimos fazer login como sendo admin, sem precisar da password:
 
-![](./screenshots/admin'#.png)
+![](./screenshots/admin__.png)
 
 Depois de fazer login, obtemos a seguinte informação:
 
@@ -103,3 +103,4 @@ Depois de fazer login, obtemos a seguinte informação:
 
 ### Task 2.2: SQL Injection Attack from command line
 
+```curl 'www.seed-server.com/unsafe_home.php?username=admin%27%23&Password='```
