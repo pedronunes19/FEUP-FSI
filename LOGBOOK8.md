@@ -153,61 +153,47 @@ Fonte:
 
 ## Task 3: SQL Injection Attack on UPDATE Statement
 
-O seguinte pedaço de código do unsafe_edit_backend.php é executado quando editamos o perfil. Com isto, é possível alterar valores dos quais não seria suposto ter permissão para alterar.
-
-```
-$hashed_pwd = sha1($input_pwd);
-$sql = "UPDATE credential SET
-  nickname=’$input_nickname’,
-  email=’$input_email’,
-  address=’$input_address’,
-  Password=’$hashed_pwd’,
-  PhoneNumber=’$input_phonenumber’
-  WHERE ID=$id;";
-$conn->query($sql);
-```
-
 ### Task 3.1: Modify your own salary
 
-Nesta primeira tarefa, fizemos login como sendo a Alice, usando a vulnerabilidade das tarefas anteriores (login com username `alice'#` (poderiamos ter usado também a password à qual temos acesso)). De seguida, ao editar o perfil, usamos `', salary='999999` no campo do nickname, o que alteraria o código para o seguinte:
+Foi feita a autenticação como Alice, por exemplo, usando a vulnerabilidade da tarefa anterior (escrevendo `alice'#` no campo `Username`). De seguida, ao editar o perfil, escreveu-se `', salary='999999` no campo `NickName` e os outros campos ficaram vazios, logo a _query_ SQL será a seguinte:
 
-```
-$sql = "UPDATE credential SET
-  nickname=’’, salary=’999999’,
-  email=’$input_email’,
-  address=’$input_address’,
-  Password=’$hashed_pwd’,
-  PhoneNumber=’$input_phonenumber’
-  WHERE ID=$id;";
+```sql
+UPDATE credential SET
+  nickname='', salary='999999',
+  email='',
+  address='',
+  Password='',
+  PhoneNumber=''
+WHERE ID=$id;
 ```
 
-Assim, estamos a alterar o salário da Alice para 999999
+O código implementado em `unsafe_edit_backend.php` contém a mesma vulnerabilidade explicada na tarefa anterior, ou seja, também é possível alterar o significado da _query_. Neste caso, foi acrescentado um atributo/coluna que era conhecido - `salary`. Assim, estamos a alterar o salário da Alice para 999999.
 
 ![](./screenshots/editprofile.png)
 
-Pela figura em baixo podemos confirmar que o valor so salário foi realmente alterado.
+Pela figura em baixo podemos confirmar que o valor do salário foi realmente alterado.
 
 ![](./screenshots/salaryedit.png)
 
 ### Task 3.2: Modify other people' salary
 
-Para esta tarefa, usamos um raciocínio semelhante ao da tarefa anterior. Desta vez usamos `', salary='1' WHERE Name='Boby';#` (na mesma no campo do nickname). Desta maneira, o código seria alterado para o seguinte:
+Para esta tarefa, usou-se um raciocínio semelhante ao da tarefa anterior. Desta vez escreveu-se `', salary='1' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios). Desta maneira, a _query_ SQL será alterada para a seguinte:
 
-```
-$sql = "UPDATE credential SET
-  nickname=’’, salary=’1’ WHERE Name=’Boby’;#,
-  email=’$input_email’,
-  address=’$input_address’,
-  Password=’$hashed_pwd’,
-  PhoneNumber=’$input_phonenumber’
-  WHERE ID=$id;";
+```sql
+UPDATE credential SET
+  nickname='', salary='1' WHERE Name='Boby';#',
+  email='',
+  address='',
+  Password='',
+  PhoneNumber=''
+WHERE ID=$id;
 ```
 
-Com isto, estamos a alterar o salário do Boby (boss) para 1, como o pretendido.
+Com isto, estamos a alterar o salário do Boby (boss) para 1 como pretendido.
 
 ![](./screenshots/editboss.png)
 
-Ao executar a query, podemos confirmar que realmente o salário do Boby  foi alterado para 1.
+Ao executar a _query_, podemos confirmar que realmente o salário do Boby foi alterado para 1.
 
 ```
 mysql> SELECT * FROM credential;
