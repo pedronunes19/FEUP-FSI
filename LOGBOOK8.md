@@ -147,7 +147,7 @@ Este erro ocorre por causa de uma medida de prevenção implementada em `unsafe_
 Poderíamos ultrapassar esta limitação, usando `mysqli()::multiquery()`.
 
 Fonte:
-- SEED book
+- SEED book (12.3.3 Multiple SQL Statements)
 
 "Such an attack does not work against MySQL, because in PHP's mysqli extension, the mysqli::query() API does not allow multiple queries to run in the database server. This is due to the concern of SQL injection. [...] It should be noted that the MySQL database server does allow multiple SQL statements to be included in one statement string. If we do want to run multiple SQL statements, we can use $mysqli->multLquery()."
 
@@ -155,7 +155,7 @@ Fonte:
 
 ### Task 3.1: Modify your own salary
 
-Foi feita a autenticação como Alice, por exemplo, usando a vulnerabilidade da tarefa anterior (escrevendo `alice'#` no campo `Username`). De seguida, ao editar o perfil, escreveu-se `', salary='999999` no campo `NickName` e os outros campos ficaram vazios, logo a _query_ SQL será a seguinte:
+Foi feita a autenticação como Alice, por exemplo, usando a vulnerabilidade da tarefa anterior (escrevendo `Alice'#` no campo `Username`). De seguida, ao editar o perfil, escreveu-se `', salary='999999` no campo `NickName` e os outros campos ficaram vazios, logo a _query_ SQL será a seguinte:
 
 ```sql
 UPDATE credential SET
@@ -212,7 +212,7 @@ mysql> SELECT * FROM credential;
 
 ### Task 3.3: Modify other people' password
 
-Pretende-se alterar a password do Boby, por exemplo para `1234`. A diferença em relação à tarefa anterior é o atributo a ser modificado, neste caso é `Password`. Sendo assim, escreveu-se `', Password='7110eda4d09e062aa5e4a390b0a572ac0d2c0220' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios) na página de editar o perfil da Alice. Desta maneira, a _query_ SQL será alterada para a seguinte:
+Pretende-se alterar a password do Boby, por exemplo para `1234`. A diferença em relação à tarefa anterior é o atributo a ser modificado, neste caso é `Password` em vez de `salary`. Sendo assim, escreveu-se `', Password='7110eda4d09e062aa5e4a390b0a572ac0d2c0220' WHERE Name='Boby';#` no campo `NickName` (e os outros campos ficaram vazios) na página de editar o perfil da Alice. Desta maneira, a _query_ SQL será alterada para a seguinte:
 
 ```sql
 UPDATE credential SET
@@ -246,3 +246,13 @@ mysql> SELECT * FROM credential;
 Como seria de esperar, conseguimos fazer login com a nova password - `1234`.
 
 ![](./screenshots/profileboby.png)
+
+# CTF - Semanas 8 e 9
+
+## Desafio 1
+
+(...)
+
+## Desafio 2
+
+(...)
