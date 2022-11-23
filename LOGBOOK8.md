@@ -79,10 +79,9 @@ Com os carateres especiais `'` e `#` é possível alterar o significado da _quer
 
 ### Task 2.2: SQL Injection Attack from command line
 
-Semelhante à tarefa anterior, mas a partir da command line.
-Como ***'*** e ***#*** são carateres especiais, precisam de ser codificados. Então, usamos o %27 e o %23, respetivamente.
+Semelhante à tarefa anterior, mas a partir da command line. Tendo em conta o exemplo fornecido e como `'` e `#` são carateres especiais, estes precisam de ser codificados. Então, usou-se o %27 e o %23, respetivamente.
 
-```
+```sh
 [11/21/22]seed@VM:~/.../Labsetup$ curl 'www.seed-server.com/unsafe_home.php?username=admin%27%23&Password='
 <!--
 SEED Lab: SQL Injection Education Web plateform
@@ -140,12 +139,17 @@ all. Therefore the navbar tag starts before the php tag but it end within the ph
 
 ### Task 2.3: Append a new SQL statement
 
-Nesta task, experimentamos correr dois SQL statements. No entanto, não fomos bem sucedidos e tivemos o seguinte erro:
+Experimentou-se correr duas (múltiplas) _SQL statements_. No entanto, como era esperado, não fomos bem sucedidos e tivemos a seguinte mensagem de erro:
 
 ![](./screenshots/error.png)
 
-Este erro ocorre por causa de uma medida de prevenção implementada no unsafe_home.php, que é o uso do `mysqli::query()` (da extensão MySQLi), cuja API não permite que várias queries sejam executadas no servidor da database, devido ao potencial risco de uma SQL Injection.
-Poderiamos ultrapassar esta limitação, usando `mysqli()::multiquery()`.
+Este erro ocorre por causa de uma medida de prevenção implementada em `unsafe_home.php`, que é o uso de `mysqli::query()` (da extensão `mysqli` do PHP), cuja API não permite que múltiplas _queries_ sejam executadas no servidor da _database_, devido ao potencial risco de uma _SQL Injection_.
+Poderíamos ultrapassar esta limitação, usando `mysqli()::multiquery()`.
+
+Fonte:
+- SEED book
+
+"Such an attack does not work against MySQL, because in PHP's mysqli extension, the mysqli::query() API does not allow multiple queries to run in the database server. This is due to the concern of SQL injection. [...] It should be noted that the MySQL database server does allow multiple SQL statements to be included in one statement string. If we do want to run multiple SQL statements, we can use $mysqli->multLquery()."
 
 ## Task 3: SQL Injection Attack on UPDATE Statement
 
