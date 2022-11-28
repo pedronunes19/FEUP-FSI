@@ -37,6 +37,11 @@ Então, vamos utilizar um script que realize essa ação ao carregar a página, 
 <script> window.onload = function(){document.getElementById('giveflag').click();} </script>
 ```
 
+![img](screenshots/apply_flag3.PNG)  
+
+![img](screenshots/apply_flag4.PNG)
 
 
 ## Desafio 2
+
+
