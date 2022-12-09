@@ -133,6 +133,8 @@ De modo a testar o ataque, fez-se _log in_ como Boby (username **boby** e passwo
 
 Tal como era esperado, sempre que um utilizador visita o perfil de `Samy`, o código é executado e `Samy` é adicionado à lista de amigos desse utilizador. 
 
+- Nota: As perguntas 1 e 2 foram respondidas ao longo da explicação da task.
+
 # CTF - Semanas 10 e 11
 
 ## Desafio 1
