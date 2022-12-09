@@ -21,7 +21,16 @@ Cookie: Elgg=6ci56crsicjs6buh3fjo2pf68o
 
 ## Task 1: Posting a Malicious Message to Display an Alert Window
 
-![](./screenshots/logbook10_task1_1.png)  
+Depois de fazer _log in_ como Samy (username **samy** e password **seedsamy**) por exemplo, tal como é sugerido no guião, colocou-se o seguinte código JavaScript no campo `Brief description` do seu perfil. Outro campo do perfil onde é esperado _input_ do utilizador, por exemplo `Location`, seria válido, porque não é apenas no campo `Brief description` que o _input_ do utilizador não é devidamente tratado.
+
+```html
+<script>alert('XSS');</script>
+```
+
+![](./screenshots/logbook10_task1_1.png)
+
+Tal como era esperado, sempre que um utilizador visita o perfil de `Samy` o código é executado e uma janela de alerta é exibida. 
+
 ![](./screenshots/logbook10_task1_2.png) 
 
 ## Task 2: Posting a Malicious Message to Display Cookies
