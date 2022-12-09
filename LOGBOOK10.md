@@ -81,6 +81,22 @@ Referer: http://www.seed-server.com/profile/samy
 
 ## Task 4: Becoming the Victim’s Friend
 
+De modo a perceber os pedidos HTTP (e os seus parâmetros) que são enviados ao servidor quando um utilizador (neste caso Alice) adiciona `Samy` à sua lista de amigos, isto é, quando clica no botão `Add friend` no perfil de `Samy`, fez-se _log in_ como Alice (username **alice** e password **seedalice**) e clicou-se no respetivo botão. O pedido HTTP capturado encontra-se na `Preparation` e foi o seguinte:
+
+```
+http://www.seed-server.com/action/friends/add?friend=59&__elgg_ts=1670606154&__elgg_token=FFMYbLmKbNuV0PqhQnzMgQ&__elgg_ts=1670606154&__elgg_token=FFMYbLmKbNuV0PqhQnzMgQ
+Host: www.seed-server.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+X-Requested-With: XMLHttpRequest
+Connection: keep-alive
+Referer: http://www.seed-server.com/profile/samy
+Cookie: Elgg=6ci56crsicjs6buh3fjo2pf68o
+```
+
+Analisando o pedido, verifica-se que o URL é `http://www.seed-server.com/action/friends/add` e o valor do parâmetro `friend` é **59** (ID de Samy), que é usado para especificar o utilizador que deve ser adicionado à lista de amigos. Existem mais dois parâmetros, `__elgg_ts` e `__elgg_token`, que são contramedidas contra ataques `CSRF`.
 
 # CTF - Semanas 10 e 11
 
