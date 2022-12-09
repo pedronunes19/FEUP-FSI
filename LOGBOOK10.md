@@ -2,6 +2,23 @@
 
 ## Preparation: Getting Familiar with the "HTTP Header Live" tool
 
+Utilizou-se a ferramenta `"HTTP Header Live"` para capturar e analisar pedidos HTTP, em particular, o pedido que é feito quando um utilizador (neste caso Alice) clica no botão `Add friend` no perfil de `Samy`, ou seja, quando se adiciona `Samy` à lista de amigos. O pedido HTTP capturado encontra-se abaixo. Este será útil na `task 4`.
+
+![](./screenshots/logbook10_task0.png) 
+
+```
+http://www.seed-server.com/action/friends/add?friend=59&__elgg_ts=1670606154&__elgg_token=FFMYbLmKbNuV0PqhQnzMgQ&__elgg_ts=1670606154&__elgg_token=FFMYbLmKbNuV0PqhQnzMgQ
+Host: www.seed-server.com
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: application/json, text/javascript, */*; q=0.01
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+X-Requested-With: XMLHttpRequest
+Connection: keep-alive
+Referer: http://www.seed-server.com/profile/samy
+Cookie: Elgg=6ci56crsicjs6buh3fjo2pf68o
+```
+
 ## Task 1: Posting a Malicious Message to Display an Alert Window
 
 ![](./screenshots/logbook10_task1_1.png)  
