@@ -4,13 +4,13 @@
 
 ## Task 1: Posting a Malicious Message to Display an Alert Window
 
-![img](screenshots/logbook10_task1_1.PNG)  
-![img](screenshots/logbook10_task1_2.PNG) 
+![](./screenshots/logbook10_task1_1.png)  
+![](./screenshots/logbook10_task1_2.png) 
 
 ## Task 2: Posting a Malicious Message to Display Cookies
 
-![img](screenshots/logbook10_task2_1.PNG) 
-![img](screenshots/logbook10_task2_2.PNG) 
+![](./screenshots/logbook10_task2_1.png) 
+![](./screenshots/logbook10_task2_2.png) 
 
 ## Task 3: Stealing Cookies from the Victim’s Machine
 
