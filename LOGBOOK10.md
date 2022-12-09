@@ -118,11 +118,20 @@ Com esta informação é possível completar o código esqueleto fornecido no gu
 </script>
 ```
 
-O código acima foi colocado no campo `About me` na página do perfil de Samy usando o `Text mode`:
+O código acima foi colocado no campo `About me` na página do perfil de Samy usando o `Text mode`. 
+Se apenas estivesse disponível o `Editor mode` continuava a ser possível lançar um ataque bem sucedido, embora fosse mais difícil - "It should be noted that even if Elgg does not provide a plaintext editor for this field, attacks can still be launched, although they will be slightly more difficult. For example, an attacker can use a browser extension to remove those formatting data from HTTP requests, or simply sends out requests using a customized client, instead of using browsers."  
+
+Fonte: 
+- SEED book (11.2.2 Use XSS Attacks to Befriend with Others) 
 
 ![](./screenshots/lobook10_task4_1.png) 
+
+De modo a testar o ataque, fez-se _log in_ como Boby (username **boby** e password **seedboby**), verificou-se que não tinha nenhum amigo na sua lista de amigos - "No friends yet.", em seguida a página do perfil de Samy foi visitada e automaticamente este foi adicionado à sua lista, mesmo não tendo clicado no botão `Add friend`.
+
 ![](./screenshots/lobook10_task4_2.png) 
 ![](./screenshots/lobook10_task4_3.png) 
+
+Tal como era esperado, sempre que um utilizador visita o perfil de `Samy`, o código é executado e `Samy` é adicionado à lista de amigos desse utilizador. 
 
 # CTF - Semanas 10 e 11
 
