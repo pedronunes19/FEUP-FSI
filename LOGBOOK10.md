@@ -35,7 +35,16 @@ Tal como era esperado, sempre que um utilizador visita o perfil de `Samy` o cód
 
 ## Task 2: Posting a Malicious Message to Display Cookies
 
+Muito semelhante à `task 1`. Tal como é sugerido no guião, substitui-se o código JavaScript da `task 1` pelo seguinte: 
+
+```html
+<script>alert(document.cookie);</script>
+```
+
 ![](./screenshots/logbook10_task2_1.png) 
+
+Tal como era esperado, sempre que um utilizador visita o perfil de `Samy` (neste caso), o código é executado e uma janela de alerta é exibida com as cookies do próprio utilizador. 
+
 ![](./screenshots/logbook10_task2_2.png) 
 
 ## Task 3: Stealing Cookies from the Victim’s Machine
