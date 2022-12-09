@@ -1,8 +1,16 @@
-# SEED Labs - SQL Injection Attack Lab
+# SEED Labs - Cross-Site Scripting (XSS) Attack Lab
+
+## Preparation: Getting Familiar with the "HTTP Header Live" tool
 
 ## Task 1: Posting a Malicious Message to Display an Alert Window
 
+![img](screenshots/logbook10_task1_1.PNG)  
+![img](screenshots/logbook10_task1_2.PNG) 
+
 ## Task 2: Posting a Malicious Message to Display Cookies
+
+![img](screenshots/logbook10_task2_1.PNG) 
+![img](screenshots/logbook10_task2_2.PNG) 
 
 ## Task 3: Stealing Cookies from the Victim’s Machine
 
