@@ -118,6 +118,12 @@ Com esta informação é possível completar o código esqueleto fornecido no gu
 </script>
 ```
 
+O código acima foi colocado no campo `About me` na página do perfil de Samy usando o `Text mode`:
+
+![](./screenshots/logbook10_task4_1.png) 
+![](./screenshots/logbook10_task4_2.png) 
+![](./screenshots/logbook10_task4_3.png) 
+
 # CTF - Semanas 10 e 11
 
 ## Desafio 1
