@@ -190,3 +190,40 @@ prime2:
 ## Task 5: Launching a Man-In-The-Middle Attack
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
+
+# CTF - Semanas 12 e 13
+
+## Desafio 1  
+
+A mensagem recebida do servidor foi encriptada por RSA. Sobre a chave sabemos que `e = 0x10001` (65537 em decimal) e que os números primos usados são os menores números primos maiores que 2^512 e 2^513, respetivamente. Usamos o [WolframAlpha](https://www.wolframalpha.com/input?i=nextprime%282%5E512%29) para saber estes valores. De forma semelhante usamos [esta aplicação](https://www.wolframalpha.com/input?i=solve+%28d+*+65537%29+mod+%28+%28nextprime%282%5E512%29+-+1%29+*+%28nextprime%282%5E513%29+-+1%29+%29+%3D+1) para resolver a equação `d*e mod ((p-1)*(q-1)) = 1` (também poderia ser usada a equação `d*e mod lcm((p-1),(q-1)) = 1`), de modo a obter o valor de `d`.  
+
+Assim, usando como base o ficheiro `template.py` fornecido, corremos este script de modo a descodificar a mensagem e obter a flag.
+
+rsa.py:  
+```python
+from binascii import hexlify, unhexlify
+
+p = 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084171 # next prime 2**512
+q = 26815615859885194199148049996411692254958731641184786755447122887443528060147093953603748596333806855380063716372972101707507765623893139892867298012168351 # next prime 2**513
+n = p*q
+e = 0x10001 # a constant
+d = 643364410957805128239433625705788478525355186387845396354027981372683647092131603505260273159610570267324385157518895074010688696710959627984304949368548745330254893993233372950752498045636757937769711210381876043694354367231083760486614175252253794208033778926333821555015473141751364815656741815522983488973   # a number such that d*e % ((p-1)*(q-1)) = 1
+
+
+enc_flag = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000f849043cd903fd4dae4f54f6ed5f0aeda5c4cf01af49d5333b4d347ff2233ef27a416164018d22150c088f3e2de4b6849c81090a405dd05c0f410c5b9a8d77ebd72ec0534bc49724862df4691c07739328753c905bb503665cccf9eb787fe76282962ce1c80168ed506afa43aa4471165021365b99c7c32d4cf8af271fac0368"
+
+def enc(x):
+	int_x = int.from_bytes(x, "big")
+	y = pow(int_x,e,n)
+	return hexlify(y.to_bytes(256, 'big'))
+
+def dec(y):
+	int_y = int.from_bytes(unhexlify(y), "big")
+	x = pow(int_y,d,n)
+	return x.to_bytes(256, 'big')
+
+y = dec(enc_flag)
+print(y.decode('latin-1'))
+```
+
+## Desafio 2
