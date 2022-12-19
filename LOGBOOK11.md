@@ -199,7 +199,7 @@ A mensagem recebida do servidor foi encriptada por RSA. Sobre a chave sabemos qu
 
 Assim, usando como base o ficheiro `template.py` fornecido, corremos este script de modo a descodificar a mensagem e obter a flag.
 
-rsa.py:  
+`rsa.py`  
 ```python
 from binascii import hexlify, unhexlify
 
