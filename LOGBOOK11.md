@@ -132,7 +132,7 @@ writing new private key to 'server.key'
 -----
 ```
 
-Com o comando `openssl req -in server.csr -text -noout` é possível verificar o seu conteúdo.
+Com o comando `openssl req -in server.csr -text -noout` é possível verificar o conteúdo do ficheiro CSR - `server.csr`.
 
 ```sh
 [12/22/22]seed@VM:~/.../Labsetup$ openssl req -in server.csr -text -noout
@@ -157,6 +157,82 @@ Certificate Request:
 ```
 
 ## Task 3: Generating a Certificate for your server
+
+Depois de descomentar a linha `copy_extensions = copy` no ficheiro de configuração `openssl.cnf`, foi possível transformar o CSR (`server.csr`) num certificado X509 (`server.crt`) usando o seguinte comando:
+
+```sh
+[12/22/22]seed@VM:~/.../Labsetup$ openssl ca -config openssl.cnf -policy policy_anything \
+>            -md sha256 -days 3650 \
+>            -in server.csr -out server.crt -batch \
+>            -cert ca.crt -keyfile ca.key
+Using configuration from openssl.cnf
+Enter pass phrase for ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 4096 (0x1000)
+        Validity
+            Not Before: Dec 22 22:11:58 2022 GMT
+            Not After : Dec 19 22:11:58 2032 GMT
+        Subject:
+            countryName               = US
+            organizationName          = L06G032022 Inc.
+            commonName                = www.l06g032022.com
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                FD:61:81:3B:20:39:9E:2F:E8:FD:45:1E:C8:6E:74:CB:1F:55:E6:8E
+            X509v3 Authority Key Identifier: 
+                keyid:96:AE:E1:73:3A:F7:84:2D:B7:B2:5D:16:23:C1:E8:12:0A:2A:2B:46
+
+            X509v3 Subject Alternative Name: 
+                DNS:www.l06g032022.com, DNS:www.l06g032022.pt, DNS:www.l06g032022.net
+Certificate is to be certified until Dec 19 22:11:58 2032 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+```
+
+Tal como é sugerido, com o comando `openssl x509 -in server.crt -text -noout` verificou-se em `X509v3 Subject Alternative Name` que os nomes alternativos (`www.l06g032022.com`, `www.l06g032022.pt` e `www.l06g032022.net`) estão incluídos no certificado. 
+
+```sh
+[12/22/22]seed@VM:~/.../Labsetup$ openssl x509 -in server.crt -text -noout
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 4096 (0x1000)
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: CN = www.modelCA.com, O = Model CA LTD., C = US
+        Validity
+            Not Before: Dec 22 22:11:58 2022 GMT
+            Not After : Dec 19 22:11:58 2032 GMT
+        Subject: C = US, O = L06G032022 Inc., CN = www.l06g032022.com
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:a9:c6:5c:1b:25:73:a0:29:5f:bc:87:d8:07:d8:
+                    (...)
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                FD:61:81:3B:20:39:9E:2F:E8:FD:45:1E:C8:6E:74:CB:1F:55:E6:8E
+            X509v3 Authority Key Identifier: 
+                keyid:96:AE:E1:73:3A:F7:84:2D:B7:B2:5D:16:23:C1:E8:12:0A:2A:2B:46
+
+            X509v3 Subject Alternative Name: 
+                DNS:www.l06g032022.com, DNS:www.l06g032022.pt, DNS:www.l06g032022.net
+    Signature Algorithm: sha256WithRSAEncryption
+         36:ec:4a:75:c1:0a:52:ba:40:16:fd:0a:39:0f:a0:6a:91:c7:
+        (...)
+```
 
 ## Task 4: Deploying Certificate in an Apache-Based HTTPS Website
 
