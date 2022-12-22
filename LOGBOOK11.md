@@ -99,19 +99,19 @@ Como o `X509v3 Subject Key Identifier` é **igual** ao `X509v3 Authority Key Ide
 
     - private exponent d
 
-![](./screenshots/logbook11_task1_1.png) 
+    ![](./screenshots/logbook11_task1_1.png) 
 
     - modulus n
 
-![](./screenshots/logbook11_task1_2.png) 
+    ![](./screenshots/logbook11_task1_2.png) 
 
     - secret number p
 
-![](./screenshots/logbook11_task1_4.png) 
+    ![](./screenshots/logbook11_task1_4.png) 
 
     - secret number q
 
-![](./screenshots/logbook11_task1_3.png) 
+    ![](./screenshots/logbook11_task1_3.png) 
 
 ## Task 2: Generating a Certificate Request for Your Web Server
 
