@@ -115,6 +115,47 @@ Como o `X509v3 Subject Key Identifier` é **igual** ao `X509v3 Authority Key Ide
 
 ## Task 2: Generating a Certificate Request for Your Web Server
 
+Gerou-se o CSR para `www.l06g032022.com` com dois nomes alternativos (`www.l06g032022.pt` e `www.l06g032022.net`) com o seguinte comando:
+
+```sh
+[12/22/22]seed@VM:~/.../Labsetup$ openssl req -newkey rsa:2048 -sha256  \
+>     -keyout server.key   -out server.csr  \
+>     -subj "/CN=www.l06g032022.com/O=L06G032022 Inc./C=US" \
+>     -passout pass:dees \
+>     -addext "subjectAltName = DNS:www.l06g032022.com,  \
+>                             DNS:www.l06g032022.pt, \
+>                             DNS:www.l06g032022.net"
+Generating a RSA private key
+.................................+++++
+........+++++
+writing new private key to 'server.key'
+-----
+```
+
+Com o comando `openssl req -in server.csr -text -noout` é possível verificar o seu conteúdo.
+
+```sh
+[12/22/22]seed@VM:~/.../Labsetup$ openssl req -in server.csr -text -noout
+Certificate Request:
+    Data:
+        Version: 1 (0x0)
+        Subject: CN = www.l06g032022.com, O = L06G032022 Inc., C = US
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                RSA Public-Key: (2048 bit)
+                Modulus:
+                    00:a9:c6:5c:1b:25:73:a0:29:5f:bc:87:d8:07:d8:
+                    (...)
+                Exponent: 65537 (0x10001)
+        Attributes:
+        Requested Extensions:
+            X509v3 Subject Alternative Name: 
+                DNS:www.l06g032022.com, DNS:www.l06g032022.pt, DNS:www.l06g032022.net
+    Signature Algorithm: sha256WithRSAEncryption
+         27:45:30:64:3b:af:8c:c7:0f:51:8a:14:9b:4d:1e:07:a3:27:
+        (...)
+```
+
 ## Task 3: Generating a Certificate for your server
 
 ## Task 4: Deploying Certificate in an Apache-Based HTTPS Website
