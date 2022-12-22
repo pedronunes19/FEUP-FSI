@@ -95,21 +95,21 @@ Como o `X509v3 Subject Key Identifier` é **igual** ao `X509v3 Authority Key Ide
 
 - In the RSA algorithm, we have a public exponent e, a private exponent d, a modulus n, and two secret numbers p and q, such that n = pq. Please identify the values for these elements in your certificate and key files.
 
-- public exponent e: `65537 (0x10001)`
+    - public exponent e: `65537 (0x10001)`
 
-- private exponent d
+    - private exponent d
 
 ![](./screenshots/logbook11_task1_1.png) 
 
-- modulus n
+    - modulus n
 
 ![](./screenshots/logbook11_task1_2.png) 
 
-- secret number p
+    - secret number p
 
 ![](./screenshots/logbook11_task1_4.png) 
 
-- secret number q
+    - secret number q
 
 ![](./screenshots/logbook11_task1_3.png) 
 
