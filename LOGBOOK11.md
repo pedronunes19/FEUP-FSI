@@ -317,6 +317,8 @@ Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativ
 
 O _website_ escolhido foi o `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
 
+- l06g032022_apache_ssl.conf 
+
 ```conf
 <VirtualHost *:443> 
     DocumentRoot /var/www/l06g032022
@@ -350,6 +352,58 @@ Ao tentar aceder a `https://www.activobank.pt`, usando o _browser_ Firefox, é p
 ![](./screenshots/logbook11_task5.png) 
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
+
+Com o acesso à `private key` - ficheiro `ca.key` -  do CA criado na `task 1` é possível gerar qualquer certificado. Para isso, gerou-se primeiro o CSR para www.activobank.pt (sem nomes alternativos) com o seguinte comando:
+
+```sh
+[12/23/22]seed@VM:~/.../Labsetup$ openssl req -newkey rsa:2048 -sha256  \
+>             -keyout server.key   -out server.csr  \
+>             -subj "/CN=www.activobank.pt/O=ActivoBank/C=US" \
+>             -passout pass:dees
+Generating a RSA private key
+........+++++
+...................................................................................................................+++++
+writing new private key to 'server.key'
+-----
+```
+
+Em seguida, foi possível transformar o CSR (server.csr) num certificado X509 (server.crt) usando o seguinte comando (com a `private key`):
+
+```sh
+[12/23/22]seed@VM:~/.../Labsetup$ openssl ca -config openssl.cnf -policy policy_anything \
+>            -md sha256 -days 3650 \
+>            -in server.csr -out server.crt -batch \
+>            -cert ca.crt -keyfile ca.key
+Using configuration from openssl.cnf
+Enter pass phrase for ca.key:
+Check that the request matches the signature
+Signature ok
+Certificate Details:
+        Serial Number: 4098 (0x1002)
+        Validity
+            Not Before: Dec 23 14:05:03 2022 GMT
+            Not After : Dec 20 14:05:03 2032 GMT
+        Subject:
+            countryName               = US
+            organizationName          = ActivoBank
+            commonName                = www.activobank.pt
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                OpenSSL Generated Certificate
+            X509v3 Subject Key Identifier: 
+                18:D4:F5:E1:EC:D1:E3:76:D2:DE:E8:23:D7:C1:D4:DF:A1:31:24:EC
+            X509v3 Authority Key Identifier: 
+                keyid:96:AE:E1:73:3A:F7:84:2D:B7:B2:5D:16:23:C1:E8:12:0A:2A:2B:46
+
+Certificate is to be certified until Dec 20 14:05:03 2032 GMT (3650 days)
+
+Write out database with 1 new entries
+Data Base Updated
+```
+
+Os ficheiros `server.crt` e `server.key` foram copiados para a pasta `image_www/certs` (substituindo os anteriores) e usou-se a mesma configuração da `task 5`, isto é, não foram feitas alterações nos ficheiros `l06g032022_apache_ssl.conf` (e `Dockerfile`) nem ao `/etc/hosts`. Finalmente, reiniciou-se o _container_ e iniciou-se o servidor Apache com o comando `service apache2 start`, como já foi mostrado na `task 4`. Ao aceder a `https://www.activobank.pt` não se verifica qualquer mensagem de aviso como demonstra o _screenshot_ abaixo.
 
 ![](./screenshots/logbook11_task6.png) 
 
