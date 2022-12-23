@@ -2,7 +2,7 @@
 
 ## Task 1: Becoming a Certificate Authority (CA)
 
-Copiou-se o ficheiro de configuração `openssl.cnf` para o atual diretório, descomentou-se a linha `unique_subject` do mesmo e criou-se os sub-diretórios (`demoCA`, `certs`, `crl` e `newcerts`) e ficheiros (`index.txt` e `serial`) necessários com os seguintes comandos:
+Copiou-se o ficheiro de configuração `openssl.cnf` para o diretório atual, descomentou-se a linha `unique_subject` do mesmo e criou-se os sub-diretórios (`demoCA`, `certs`, `crl` e `newcerts`) e ficheiros (`index.txt` e `serial`) necessários com os seguintes comandos:
 
 ```sh
 [12/22/22]seed@VM:~/.../Labsetup$ cp /usr/lib/ssl/openssl.cnf .
