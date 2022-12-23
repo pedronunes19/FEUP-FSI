@@ -236,6 +236,8 @@ Certificate:
 
 ## Task 4: Deploying Certificate in an Apache-Based HTTPS Website
 
+Seguiu-se o exemplo fornecido para fazer as alterações necessárias no `Dockerfile` e criar o ficheiro `l06g032022_apache_ssl.conf` (baseado no `bank32 apache ssl.conf`), cuja explicação já se encontra no guião, daí ser aqui omitida. Os campos `DocumentRoot`, `ServerName`, `ServerAlias`, `SSLCertificateFile` e `SSLCertificateKeyFile` (do ficheiro `bank32 apache ssl.conf`) foram modificados, para além dos ficheiros `server.crt` e `server.key` terem sido copiados para a pasta `image_www/certs`.
+
 - l06g032022_apache_ssl.conf 
 
 ```conf
@@ -279,6 +281,8 @@ RUN  chmod 400 /certs/server.key \
 CMD  tail -f /dev/null
 ```
 
+Para iniciar o servidor Apache utilizou-se o comando `service apache2 start`.
+
 ```sh
 [12/22/22]seed@VM:~/.../Labsetup$ dockps
 ea37c7b1beb5  www-10.9.0.80
@@ -290,11 +294,17 @@ Enter passphrase for SSL/TLS keys for www.l06g032022.com:443 (RSA):
 root@ea37c7b1beb5:/#
 ``` 
 
+Ao tentar aceder a `https://www.l06g032022.com`, usando o _browser_ Firefox, é possível visualizar a mensagem de aviso `"Warning: Potential Security Risk Ahead"` cujo código de erro é `SEC_ERROR_UNKNOWN_ISSUER`.
+
 ![](./screenshots/logbook11_task4_1.png)
+
+Isto acontece, porque o _browser_ (Firefox) não conhece o emissor do certificado usado por `www.l06g032022.com`, neste caso `Model CA LTD.` (task 1). Isto é, `Model CA LTD.` não está na lista de CAs confiáveis do _browser_, logo nenhum certificado emitido por esse CA será de confiança. No entanto, é possível adicionar manualmente `Model CA LTD.` - ficheiro `ca.crt`- à lista, tal como é explicado no guião e os seguintes 2 _screenshots_.
 
 ![](./screenshots/logbook11_task4_2.png) 
 
 ![](./screenshots/logbook11_task4_3.png) 
+
+Assim, é possível a `https://www.l06g032022.com` e aos nomes alternativos (`https://www.l06g032022.pt` e `https://www.l06g032022.net`) sem ser apresentada qualquer mensagem de aviso como se pode confirmar nos _screenshots_ abaixo.
 
 ![](./screenshots/logbook11_task4_4.png) 
 
