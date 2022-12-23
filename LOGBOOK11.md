@@ -236,6 +236,73 @@ Certificate:
 
 ## Task 4: Deploying Certificate in an Apache-Based HTTPS Website
 
+- l06g032022_apache_ssl.conf 
+
+```conf
+<VirtualHost *:443> 
+    DocumentRoot /var/www/l06g032022
+    ServerName www.l06g032022.com
+    ServerAlias www.l06g032022.pt
+    ServerAlias www.l06g032022.net
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /certs/server.crt
+    SSLCertificateKeyFile /certs/server.key
+</VirtualHost>
+
+<VirtualHost *:80> 
+    DocumentRoot /var/www/l06g032022
+    ServerName www.l06g032022.com
+    DirectoryIndex index_red.html
+</VirtualHost>
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+```
+
+- Dockerfile
+
+```dockerfile
+FROM handsonsecurity/seed-server:apache-php
+
+ARG WWWDIR=/var/www/l06g032022
+
+COPY ./index.html ./index_red.html $WWWDIR/
+COPY ./l06g032022_apache_ssl.conf /etc/apache2/sites-available
+COPY ./certs/server.crt ./certs/server.key  /certs/
+
+RUN  chmod 400 /certs/server.key \
+     && chmod 644 $WWWDIR/index.html \
+     && chmod 644 $WWWDIR/index_red.html \
+     && a2ensite l06g032022_apache_ssl   
+
+CMD  tail -f /dev/null
+```
+
+```sh
+[12/22/22]seed@VM:~/.../Labsetup$ dockps
+ea37c7b1beb5  www-10.9.0.80
+[12/22/22]seed@VM:~/.../Labsetup$ docksh ea
+root@ea37c7b1beb5:/# service apache2 start
+ * Starting Apache httpd web server apache2
+Enter passphrase for SSL/TLS keys for www.l06g032022.com:443 (RSA):
+ * 
+root@ea37c7b1beb5:/#
+``` 
+
+![](./screenshots/logbook11_task4_1.png)
+
+![](./screenshots/logbook11_task4_2.png) 
+
+![](./screenshots/logbook11_task4_3.png) 
+
+![](./screenshots/logbook11_task4_4.png) 
+
+![](./screenshots/logbook11_task4_5.png) 
+
+![](./screenshots/logbook11_task4_6.png) 
+
+
 ## Task 5: Launching a Man-In-The-Middle Attack
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
