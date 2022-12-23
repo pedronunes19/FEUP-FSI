@@ -315,7 +315,7 @@ Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativ
 
 ## Task 5: Launching a Man-In-The-Middle Attack
 
-O _website_ escolhido foi o `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
+O _website_ escolhido foi `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
 
 ```conf
 <VirtualHost *:443> 
@@ -339,10 +339,7 @@ O _website_ escolhido foi o `www.activobank.pt` e modificou-se o campo `ServerNa
 ServerName localhost
 ```
 
-Para mapear o _hostname_ `www.activobank.pt` para o nosso servidor malicioso foi acrescentada a linha abaixo no ficheiro `/etc/hosts`, assim é possível simular o resultado de um _DNS cache positing attack_.
-    ```
-    10.9.0.80  www.activobank.pt
-    ```
+Foi acrescentada a linha seguinte `/etc/hosts` [...]
 
 ![](./screenshots/logbook11_task5.png) 
 
@@ -386,3 +383,82 @@ print(y.decode('latin-1'))
 ```
 
 ## Desafio 2
+
+Desta vez eram-nos dadas pelo servidor duas mensagens, iguais em conteúdo, encriptadas por RSA com chaves públicas diferentes, mas com o mesmo `n`.  
+Assim, procuramos por soluções para este problema, que passam por resolver um sistema de equações modulares.  
+Esta foi a solução seguida: https://crypto.stackexchange.com/questions/1614/rsa-cracking-the-same-message-is-sent-to-two-different-people-problem.  
+
+`rsa.py`
+```python
+from binascii import hexlify, unhexlify
+
+def enc(x):
+	int_x = int.from_bytes(x, "big")
+	y = pow(int_x,e,n)
+	return hexlify(y.to_bytes(256, 'big'))
+
+def dec(y):
+	int_y = int.from_bytes(unhexlify(y), "big")
+	x = pow(int_y,d,n)
+	return x.to_bytes(256, 'big')
+
+n = 29802384007335836114060790946940172263849688074203847205679161119246740969024691447256543750864846273960708438254311566283952628484424015493681621963467820718118574987867439608763479491101507201581057223558989005313208698460317488564288291082719699829753178633499407801126495589784600255076069467634364857018709745459288982060955372620312140134052685549203294828798700414465539743217609556452039466944664983781342587551185679334642222972770876019643835909446132146455764152958176465019970075319062952372134839912555603753959250424342115581031979523075376134933803222122260987279941806379954414425556495125737356327411
+
+e1 = 0x10001 # 65537
+
+c1 = b'6da84b7647aa1657b2d9343a790576eae8f75f163cf5a2ee82a5bce60daceda659d8007543b1d47d69d3a239b61a25c218e62f4961a98681772db5f2b41676a99bd4a6d11ba22d8f4b44d405e466f19b3fc2c0730ff6b95318427fb980828dea03feb5a83c8f81abd3678a711978d91802c67418a910e9c0ca1aab7bac058aa4ea87286071df59b97b28af562a3a2e5bcb73037b8673cb53128879479a56b556b04ad45a8f7a8624fd38bd6290c1a4c91a17327471ddb696ef1bd12d7cd6a5510f1240507f2004d54c7c654c30ae9f93848b8ea5ae8559d8e491fd2509d4b4896f166d47fa1cad4f07c0deebe1e9c50ba34f793741e5254ad790415f696d8f97'
+
+int_c1 = int.from_bytes(unhexlify(c1), "big")
+
+e2 = 0x10003 # 65539
+
+c2 = b'1a8a33e34963bf3acb6f9eb1b34b7f2bb11a1e295c83e66c30378ad036d6576e90e4e06bd0495a5b3838236a4ed70579907081561a07a9ea5fa52868eb09d3698653ec8b949ce082ac37599ee1ad5528eedf02e9bd1d6bcdd2b9e88d61d8326f25bd962b16419705b5444a7a94e0563a139e358fb6351bb0afba02e069427a0bac4d490598db1ce8c0b1a0e87c0e2f0214f15b8b9275f1634387a48c065e452a8659f960d6bfa24123da1689cce8e1934e1b083351ddefe29f0bd72e1eae9d9280090938023dd1ab7ce000098359debe954294fa451f1fc623bab5fabdcca071aa41f4349608d8aad7ce3e84a0ae0d4ae241c7cd6fbe38f3ff0a7631ae5ffcb8'
+
+int_c2 = int.from_bytes(unhexlify(c2), "big")
+
+# gcd(e1, e2) = 1
+# a*e1 + b*e2 = 1
+# https://www.wolframalpha.com/input?i=solve+a*65537+%2B+b*65539+%3D+1+for+a%2C+b+integer
+a = 32769
+b = -32768
+
+def modInverse(A, M):
+    m0 = M
+    y = 0
+    x = 1
+ 
+    if (M == 1):
+        return 0
+ 
+    while (A > 1):
+ 
+        # q is quotient
+        q = A // M
+ 
+        t = M
+ 
+        # m is remainder now, process
+        # same as Euclid's algo
+        M = A % M
+        A = t
+        t = y
+ 
+        # Update x and y
+        y = x - q * y
+        x = t
+ 
+    # Make x positive
+    if (x < 0):
+        x = x + m0
+ 
+    return x
+
+
+i = modInverse(int_c2, n)
+
+m = ((int_c1**a) * (i**(-b))) % n 
+
+m = m.to_bytes(256, 'big')
+print(m.decode('latin-1'))
+```
+
