@@ -403,7 +403,7 @@ Write out database with 1 new entries
 Data Base Updated
 ```
 
-Os ficheiros `server.crt` e `server.key` foram copiados para a pasta `image_www/certs` (substituindo os anteriores) e usou-se a mesma configuração da `task 5`, isto é, não foram feitas alterações nos ficheiros `l06g032022_apache_ssl.conf` (e `Dockerfile`) nem ao `/etc/hosts`. Finalmente, reiniciou-se o _container_ e iniciou-se o servidor Apache com o comando `service apache2 start`, como já foi mostrado na `task 4`. Ao aceder a `https://www.activobank.pt` não se verifica qualquer mensagem de aviso como demonstra o _screenshot_ abaixo.
+Os ficheiros `server.crt` e `server.key` foram copiados para a pasta `image_www/certs` (substituindo os anteriores) e usou-se a mesma configuração da `task 5`, isto é, não foram feitas alterações nos ficheiros `l06g032022_apache_ssl.conf` (e `Dockerfile`) nem ao `/etc/hosts`. Finalmente, reiniciou-se o _container_ e iniciou-se o servidor Apache com o comando `service apache2 start`, como já foi mostrado na `task 4`. Acedendo ao _fake_  `https://www.activobank.pt` não se verifica qualquer mensagem de aviso como demonstra o _screenshot_ abaixo.
 
 ![](./screenshots/logbook11_task6.png) 
 
