@@ -298,7 +298,7 @@ Ao tentar aceder a `https://www.l06g032022.com`, usando o _browser_ Firefox, é 
 
 ![](./screenshots/logbook11_task4_1.png)
 
-Isto acontece, porque o _browser_ (Firefox) não conhece o emissor do certificado usado por `www.l06g032022.com`, neste caso `Model CA LTD.` (task 1). Isto é, `Model CA LTD.` não está na lista de CAs confiáveis do _browser_, logo nenhum certificado emitido por esse CA será de confiança. No entanto, é possível adicionar manualmente `Model CA LTD.` - ficheiro `ca.crt`- à lista, tal como é explicado no guião e os seguintes 2 _screenshots_.
+Isto acontece, porque o _browser_ (Firefox) não conhece o emissor do certificado usado por `www.l06g032022.com`, neste caso `Model CA LTD.` (task 1). Isto é, `Model CA LTD.` não está na lista de CAs confiáveis do _browser_, logo nenhum certificado emitido por esse CA será de confiança. No entanto, é possível adicionar manualmente `Model CA LTD.` - ficheiro `ca.crt`- à lista, tal como é explicado no guião e nos seguintes _screenshots_.
 
 ![](./screenshots/logbook11_task4_2.png) 
 
