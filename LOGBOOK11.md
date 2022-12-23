@@ -304,7 +304,7 @@ Isto acontece, porque o _browser_ (Firefox) não conhece o emissor do certificad
 
 ![](./screenshots/logbook11_task4_3.png) 
 
-Assim, é possível a `https://www.l06g032022.com` e aos nomes alternativos (`https://www.l06g032022.pt` e `https://www.l06g032022.net`) sem ser apresentada qualquer mensagem de aviso como se pode confirmar nos _screenshots_ abaixo.
+Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativos (`https://www.l06g032022.pt` e `https://www.l06g032022.net`) sem ser apresentada qualquer mensagem de aviso, como se pode confirmar nos _screenshots_ abaixo.
 
 ![](./screenshots/logbook11_task4_4.png) 
 
