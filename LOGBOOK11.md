@@ -315,6 +315,32 @@ Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativ
 
 ## Task 5: Launching a Man-In-The-Middle Attack
 
+O _website_ escolhido foi `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
+
+```conf
+<VirtualHost *:443> 
+    DocumentRoot /var/www/l06g032022
+    ServerName www.activobank.pt
+    ServerAlias www.l06g032022.pt
+    ServerAlias www.l06g032022.net
+    DirectoryIndex index.html
+    SSLEngine On 
+    SSLCertificateFile /certs/server.crt
+    SSLCertificateKeyFile /certs/server.key
+</VirtualHost>
+
+<VirtualHost *:80> 
+    DocumentRoot /var/www/l06g032022
+    ServerName www.l06g032022.com
+    DirectoryIndex index_red.html
+</VirtualHost>
+
+# Set the following gloal entry to suppress an annoying warning message
+ServerName localhost
+```
+
+Foi acrescentada a linha seguinte `/etc/hosts` [...]
+
 ![](./screenshots/logbook11_task5.png) 
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
