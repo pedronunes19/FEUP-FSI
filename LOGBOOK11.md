@@ -353,7 +353,7 @@ Ao tentar aceder a `https://www.activobank.pt`, usando o _browser_ Firefox, é p
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
 
-Com o acesso à `private key` - ficheiro `ca.key` -  do CA criado na `task 1` é possível gerar qualquer certificado. Para isso, gerou-se primeiro o CSR para www.activobank.pt (sem nomes alternativos) com o seguinte comando:
+Com o acesso à `private key` - ficheiro `ca.key` -  do CA criado na `task 1` é possível gerar qualquer certificado. Para isso, gerou-se primeiro o **CSR** para `www.activobank.pt` (sem nomes alternativos) com o seguinte comando:
 
 ```sh
 [12/23/22]seed@VM:~/.../Labsetup$ openssl req -newkey rsa:2048 -sha256  \
@@ -367,7 +367,7 @@ writing new private key to 'server.key'
 -----
 ```
 
-Em seguida, foi possível transformar o CSR (server.csr) num certificado X509 (server.crt) usando o seguinte comando (com a `private key`):
+Em seguida, foi possível transformar o CSR (server.csr) num **certificado X509** (server.crt) usando o seguinte comando (com a `private key`):
 
 ```sh
 [12/23/22]seed@VM:~/.../Labsetup$ openssl ca -config openssl.cnf -policy policy_anything \
