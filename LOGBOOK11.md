@@ -315,7 +315,7 @@ Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativ
 
 ## Task 5: Launching a Man-In-The-Middle Attack
 
-O _website_ escolhido foi `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
+O _website_ escolhido foi o `www.activobank.pt` e modificou-se o campo `ServerName` do ficheiro `l06g032022_apache_ssl.conf`, utilizado na `task 4`, como é sugerido:
 
 ```conf
 <VirtualHost *:443> 
@@ -339,7 +339,10 @@ O _website_ escolhido foi `www.activobank.pt` e modificou-se o campo `ServerName
 ServerName localhost
 ```
 
-Foi acrescentada a linha seguinte `/etc/hosts` [...]
+Para mapear o _hostname_ `www.activobank.pt` para o nosso servidor malicioso foi acrescentada a linha abaixo no ficheiro `/etc/hosts`, assim é possível simular o resultado de um _DNS cache positing attack_.
+    ```
+    10.9.0.80  www.activobank.pt
+    ```
 
 ![](./screenshots/logbook11_task5.png) 
 
