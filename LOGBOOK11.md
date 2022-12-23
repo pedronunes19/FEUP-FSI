@@ -319,6 +319,8 @@ Assim, é possível aceder a `https://www.l06g032022.com` e aos nomes alternativ
 
 ## Task 6: Launching a Man-In-The-Middle Attack with a Compromised CA
 
+![](./screenshots/logbook11_task6.png) 
+
 # CTF - Semanas 12 e 13
 
 ## Desafio 1  
