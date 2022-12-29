@@ -81,6 +81,14 @@ Depois do script ser executado basta ler o conteúdo do ficheiro `/tmp/last_log`
 
 ## Apply For Flag II
 
+![](./screenshots/apply_for_flag2_1.png) 
+
+![](./screenshots/apply_for_flag2_2.png) 
+
+![](./screenshots/apply_for_flag2_3.png) 
+
+![](./screenshots/apply_for_flag2_4.png) 
+
 ```html
 <form method="POST" action="http://ctf-fsi.fe.up.pt:5005/request/<requestID>/approve" role="form">
     <div class="submit">
@@ -94,6 +102,14 @@ Depois do script ser executado basta ler o conteúdo do ficheiro `/tmp/last_log`
     } 
 </script>
 ``` 
+
+- Nota: neste caso `<requestID>` seria `fa9d70d9d2ed6c76ac2f46f6f203bb80b6f46dbb`.
+
+![](./screenshots/apply_for_flag2_5.png) 
+
+![](./screenshots/apply_for_flag2_6.png) 
+
+![](./screenshots/apply_for_flag2_7.png) 
 
 
 
