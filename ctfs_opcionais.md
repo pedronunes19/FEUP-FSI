@@ -87,7 +87,7 @@ Verificou-se a existência do ID do pedido - `<requestID>` - e de um _form_ onde
 
 ![](./screenshots/apply_for_flag2_2.png) 
 
-Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código fonte se encontra no _screenshot_ abaixo. O objetivo é fazer o administrador clicar nesse botão.
+Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código fonte se encontra no _screenshot_ abaixo. O objetivo é fazer o _admin_ clicar nesse botão.
 
 ![](./screenshots/apply_for_flag2_3.png) 
 
@@ -117,6 +117,8 @@ Clicou-se no botão `Submit` e deu origem ao seguinte erro:
 Para contornar isso, não se permitiu os sites usarem _JavaScript_ no _browser_. No _Google Chrome_ é possível fazer isso em `chrome://settings/content/javascript` como demonstra o _screenshot_ abaixo.
 
 ![](./screenshots/apply_for_flag2_4.png) 
+
+Com a opção `Don't allow sites to use Javascript` selecionada, voltou-se a submeter o _input_, em seguida atualizou-se a página e a _flag_ foi dada.
 
 ![](./screenshots/apply_for_flag2_6.png) 
 
