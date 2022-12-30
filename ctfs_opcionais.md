@@ -106,9 +106,11 @@ Para isso, copiou-se o código fonte do botão, alterou-se o atributo `action` e
 </script>
 ``` 
 
-- Nota: neste caso `<requestID>` seria `fa9d70d9d2ed6c76ac2f46f6f203bb80b6f46dbb`.
+- Nota: neste caso `<requestID>` é `fa9d70d9d2ed6c76ac2f46f6f203bb80b6f46dbb`.
 
 ![](./screenshots/apply_for_flag2_5.png) 
+
+![](./screenshots/apply_for_flag2_8.png) 
 
 ![](./screenshots/apply_for_flag2_4.png) 
 
