@@ -110,7 +110,11 @@ Para isso, copiou-se o código fonte do botão, alterou-se o atributo `action` e
 
 ![](./screenshots/apply_for_flag2_5.png) 
 
+Clicou-se no botão `Submit` e deu origem ao seguinte erro:
+
 ![](./screenshots/apply_for_flag2_8.png) 
+
+Para contornar isso, não se permitiu os sites usarem _JavaScript_ no _browser_. No _Google Chrome_ é possível fazer isso em `chrome://settings/content/javascript` como demonstra o _screenshot_ abaixo.
 
 ![](./screenshots/apply_for_flag2_4.png) 
 
