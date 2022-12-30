@@ -114,7 +114,8 @@ Clicou-se no botão `Submit` e deu origem ao seguinte erro:
 
 ![](./screenshots/apply_for_flag2_8.png) 
 
-Para contornar isso, não se permitiu os sites usarem _JavaScript_ no _browser_. No _Google Chrome_ é possível fazer isso em `chrome://settings/content/javascript` como demonstra o _screenshot_ abaixo.
+O problema encontra-se no facto do _browser_ não permitir que pedidos HTTP sejam feitos para origens diferentes.  
+Para contornar isso, permitindo que fossem feitos pedidos _cross origin_ retirou-se a permissão para que os sites usassem _JavaScript_ no _browser_. No _Google Chrome_ é possível fazer isso em `chrome://settings/content/javascript` como demonstra o _screenshot_ abaixo.
 
 ![](./screenshots/apply_for_flag2_4.png) 
 
