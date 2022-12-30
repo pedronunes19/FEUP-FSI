@@ -81,9 +81,13 @@ Depois do script ser executado basta ler o conteúdo do ficheiro `/tmp/last_log`
 
 ## Apply For Flag II
 
+Verificou-se a existência do ID do pedido - `<requestID>` - e de um _form_ onde é possível inserir texto, que à partida não é devidamente tratado. Para efeitos de teste, deu-se um _input_ qualquer (_string_ "justification" no caso), que é verificado pelo _admin_ na página `http://ctf-fsi.fe.up.pt:5005/request/<requestID>`. 
+
 ![](./screenshots/apply_for_flag2_1.png) 
 
 ![](./screenshots/apply_for_flag2_2.png) 
+
+Na página utilizada pelo _admin_, existe o botão `Give the flag` cujo código fonte se encontra no _screenshot_ abaixo. 
 
 ![](./screenshots/apply_for_flag2_3.png) 
 
